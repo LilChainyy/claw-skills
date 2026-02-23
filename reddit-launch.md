@@ -99,6 +99,34 @@ Every post must end with a line that does one of these:
 
 ---
 
+## Persona Rule
+
+Every post needs one sentence early on that grounds who is speaking. Not a bio. Just enough context to make the frustration feel human and earned.
+
+**Why it matters:** Without it, posts feel like they came from nowhere — a product floating in a void. One line of "who I am" makes the reader identify with you before you've said anything about what you built.
+
+### How to use it
+- Weave it naturally into the first paragraph — never as a standalone intro line
+- One sentence max
+- Match the persona to the subreddit's audience
+
+### Persona options — pick the one that fits the sub
+
+| Subreddit type | Persona line example |
+|---|---|
+| Indie/solo builder subs (r/SideProject, r/indiehackers, r/MicroSaas) | "I've been building solo projects for a couple years — no team, just me shipping things and figuring out distribution as I go." |
+| Entrepreneur/founder subs (r/Entrepreneur, r/startups) | "I run a small bootstrapped operation, which means I'm the builder, the marketer, and the person copy-pasting things into LinkedIn at midnight." |
+| Side hustle / passive income subs (r/thesidehustle, r/passive_income) | "I build things evenings and weekends alongside a day job, so every hour of launch work I can cut actually matters." |
+| Growth / SaaS subs (r/GrowthHacking, r/SaaS) | "I've launched a few products over the past couple years and the distribution side has always taken longer than the build." |
+| Community / general (r/productivity, r/business) | "I build software on the side and recently went through a launch that reminded me how much time the non-building parts actually take." |
+
+### What not to do
+- Don't open with "I'm an indie developer and I built..." — that's a bio, not a persona
+- Don't make the persona the focus — it's one sentence, then move on
+- Don't use the same line across multiple posts — vary it
+
+---
+
 ## If Something Goes Wrong
 
 - Post removed silently: check in incognito, log it, skip the sub or adjust angle
