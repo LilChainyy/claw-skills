@@ -1,113 +1,125 @@
 ---
 name: x-morning-brief
-description: Twice-weekly morning research brief. Finds 5 noteworthy X (Twitter) posts from cyy's niche areas — AI/LLMs, PM, deep tech, VC/startup, devtools. Delivered Monday and Wednesday at 8 AM. Pure research, no engagement required.
+description: Twice-weekly morning research brief. Uses X API to find 5 noteworthy posts from cyy's niche areas — AI/LLMs, PM, deep tech, VC/startup, devtools. Delivered Monday and Wednesday at 8 AM. Pure research, no engagement required.
 ---
 
 # X Morning Brief
 
 ## Purpose
 
-Deliver 5 links to noteworthy X posts worth reading. Not necessarily from people cyy follows — expanding the circle is the point. No engagement needed. Pure signal.
+Find 5 X posts worth reading from the past few days. Not a summary — actual links. Covers what's stirring in cyy's niche circles whether or not they follow the person.
 
-Runs Monday and Wednesday at 8 AM. Covers posts worth noting from the past few days.
+Runs Monday and Wednesday at 8 AM. Covers posts from the past 2-3 days.
 
 ---
 
-## Topic Areas (in priority order)
+## Credentials
 
-1. **AI/LLMs** — model releases, research papers getting traction, infra shifts, notable debates (context windows, agents, evals, reasoning, cost curves)
-2. **Product management** — career takes, frameworks getting shared/debated, big product decisions at real companies, hot takes from PMs at known companies
-3. **Deep tech** — biotech breakthroughs, space (SpaceX, launch industry), chip news (TSMC, Nvidia, AMD), robotics milestones
-4. **VC/startup funding** — notable rounds, fund announcements, investor takes on market, deal analysis worth reading
-5. **Developer tools / devex** — new tool releases, paradigm shifts, adoption stories, strong takes on workflows
+Bearer Token is stored in TOOLS.md. Load it from there before making any API calls.
+
+---
+
+## Topic Areas
+
+1. **AI/LLMs** — model releases, research getting traction, infra shifts, agent/eval/reasoning debates
+2. **Product management** — frameworks, career takes, big product decisions, PM hot takes
+3. **Deep tech** — biotech, space, chips (TSMC/Nvidia/AMD), robotics
+4. **VC/startup** — notable rounds, fund news, investor market takes
+5. **Developer tools / devex** — new tool launches, paradigm shifts, workflow debates
+
+---
+
+## How to Run
+
+### Step 1 — Search each topic area via X API
+
+Use the recent search endpoint with engagement-based filtering:
+
+```
+GET https://api.twitter.com/2/tweets/search/recent
+  ?query=QUERY
+  &max_results=20
+  &tweet.fields=public_metrics,author_id,created_at,entities
+  &expansions=author_id
+  &user.fields=name,username,public_metrics
+  &sort_order=relevancy
+Authorization: Bearer TOKEN
+```
+
+Run one query per topic area. Use these queries:
+
+| Topic | Query |
+|---|---|
+| AI/LLMs | `(AI OR LLM OR "language model" OR "model release" OR "reasoning model") -is:retweet -is:reply lang:en min_faves:50` |
+| PM | `("product management" OR "product manager" OR "product decision" OR "PM take") -is:retweet -is:reply lang:en min_faves:30` |
+| Deep tech | `(biotech OR "space launch" OR semiconductor OR robotics OR "chip shortage" OR TSMC OR Nvidia) -is:retweet -is:reply lang:en min_faves:30` |
+| VC/startup | `(funding OR "Series A" OR "Series B" OR "seed round" OR "venture capital" OR VC) -is:retweet -is:reply lang:en min_faves:30` |
+| Devtools | `("developer tool" OR devex OR SDK OR "new framework" OR "dev workflow" OR "open source") -is:retweet -is:reply lang:en min_faves:30` |
+
+### Step 2 — Score and filter results
+
+From each topic's results, pick the single best post using this scoring:
+
+**Must pass:**
+- Posted in the last 3 days
+- At least 30 likes (50+ for AI topic)
+- Not a retweet, not a reply thread opener with no context
+
+**Prefer:**
+- High reply count relative to likes (signals debate, not just passive approval)
+- From accounts with 1K+ followers (but don't exclude smaller accounts if the content is strong)
+- Says something new, not just reacts to something older
+- Short and sharp over long and thorough
+
+**Skip:**
+- Engagement bait ("change my mind", "hot take:", "thread:")
+- Generic AI hype ("ChatGPT changed everything")
+- Fundraising announcements with no substance or context
+- Hustle/motivational content
+- Anything that just describes a feature release without analysis
+
+### Step 3 — Build the 5-post list
+
+Pick the single best post from each topic area. If one area had nothing noteworthy, replace it with a second pick from the strongest area that week.
+
+Construct a direct x.com link:
+```
+https://x.com/[username]/status/[tweet_id]
+```
+
+### Step 4 — Send to cyy via Telegram
+
+Format:
+```
+Morning brief — [Mon/Wed], [Date]
+
+1. [Why it's worth 2 min — not what it's about, why it matters now]
+   https://x.com/username/status/id
+
+2. ...
+
+3. ...
+
+4. ...
+
+5. ...
+```
+
+The one-line description must say why it's worth reading today, not just describe the topic. Bad: "interesting AI post." Good: "Anthropic researcher on why reasoning models are hitting a wall on multi-step planning — specific and not the usual hype."
 
 ---
 
 ## What "worth noting" means
 
-Not just popular. Noteworthy means one of:
-- Changes how people are thinking about something (not just confirms what they already think)
-- Announces something that will matter in 6 months (funding, release, research)
-- Is a take so sharp or contrarian that people are debating it
-- Is from a credible voice in a field sharing something they've actually built or seen firsthand
+One of:
+- Changes how people think about something, not just confirms what they already believe
+- Announces something that will matter in 6 months
+- A take so sharp or contrarian that it's generating real debate (check reply count)
+- From someone who has built/shipped something sharing firsthand observations
 - Signals a shift — something that would have been unsayable 6 months ago
 
-Skip:
-- Engagement bait ("change my mind", "hot take:")
-- Reposts of old content with no new angle
-- Fundraising announcements with no substance
-- Generic motivational/hustle content
-- Anything that just describes what ChatGPT can do for the 10,000th time
-
 ---
 
-## How to find the posts
+## Schedule
 
-**Step 1 — Web search for each topic area**
-
-Run targeted searches to find what's generating discussion on X right now:
-
-```
-site:x.com [topic keyword] after:[2 days ago date]
-```
-
-Or search for news in the topic area and find the X threads/posts that are driving the conversation:
-```
-[topic] twitter discussion [current month year]
-[topic] announcement site:x.com
-```
-
-Search queries to use per topic:
-- AI/LLMs: `AI model release announcement twitter`, `LLM research breakthrough x.com`, `AI agent new capability twitter`
-- PM: `product management take twitter`, `product decision PM x.com`, `PM framework viral twitter`
-- Deep tech: `biotech funding announcement twitter`, `space launch news x.com`, `chip semiconductor x.com`
-- VC/startup: `startup funding round twitter`, `VC take market x.com`, `seed series announcement twitter`
-- Devtools: `developer tool launch twitter`, `devex workflow x.com`, `new SDK release twitter`
-
-**Step 2 — Score each candidate**
-
-Before including a post, check:
-- Is it recent (last 3 days)?
-- Does it have meaningful engagement (replies, quotes, reposts) not just likes?
-- Is it actually saying something or just announcing?
-- Does it pass the "worth noting" criteria above?
-
-**Step 3 — Pick 5 across all topic areas**
-
-Aim for variety — ideally at least 3 different topic areas represented. Don't fill all 5 slots with AI if deep tech had a significant week.
-
----
-
-## Output Format
-
-Send via Telegram to cyy. Keep it tight.
-
-```
-Morning brief — [Day, Date]
-
-1. [One-line description of what makes it worth reading]
-   [x.com/... link]
-
-2. [One-line description]
-   [x.com/... link]
-
-3. [One-line description]
-   [x.com/... link]
-
-4. [One-line description]
-   [x.com/... link]
-
-5. [One-line description]
-   [x.com/... link]
-```
-
-The one-line description should say why it's worth 2 minutes of attention, not just describe the topic. Bad: "interesting AI post." Good: "Anthropic researcher shares why reasoning models are hitting a wall on multi-step planning."
-
----
-
-## What this is not
-
-- Not a newsletter summary
-- Not a thread recap
-- Not a list of trending hashtags
-- Just 5 links that are worth opening on a Monday or Wednesday morning
+Monday and Wednesday at 8 AM cyy's local time. Timezone in MEMORY.md once confirmed.
