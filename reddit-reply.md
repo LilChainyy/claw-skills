@@ -32,6 +32,68 @@ Every comment comes from this person.
 
 ---
 
+## What Gets Upvoted — Research-Backed Criteria
+
+Before writing any comment, check it against these patterns. These come from studying r/TheoryOfReddit, comment quality research across millions of Reddit comments, and viral post analysis in tech/builder subs.
+
+### The 6 comment types that consistently get upvoted
+
+**1. "You said what I was thinking"**
+Articulates the shared feeling that nobody else put into words. Gets upvoted because people feel seen/validated. Works when a thread has a lot of vague frustration and you name it precisely.
+
+Example: Someone posts about a complicated dev setup. Your comment: "the real problem isn't the tool, it's that every new tool promises to be the last tool."
+
+**2. The one-sentence killer**
+Short, sharp, lands perfectly. Dry wit, the perfect analogy, or just the exact right observation. These punch above their weight because they're easy to upvote and re-read.
+
+Example: "most 'best practices' are just 'what the last senior dev was comfortable with' written down."
+
+**3. The "wait, actually" insight**
+Gently reframes or corrects the premise with a fact or angle the thread missed. People upvote because they learned something or had their mind slightly changed. Must be specific — a vague counterpoint gets ignored.
+
+Example: Someone asks if jQuery is dead. Your comment: "jQuery still ships on more sites than React, Vue, and Angular combined. 'dead' means 'the blogs stopped writing about it.'"
+
+**4. The specific experience**
+"I did this exact thing and here's what actually happened: [specific detail]." More specific = more credible = more upvotes. Generic experiences get ignored. Exact numbers, exact tools, exact outcomes get read.
+
+Example: "spent 3 weeks on our own auth system. two months later we replaced it with Auth0. the 3 weeks were not worth it."
+
+**5. The pattern recognition**
+"This keeps happening because X" — when X explains something the reader noticed but couldn't name. These are the most shareable comments.
+
+Example: "every startup I've seen die at series A had the same thing: the founders stopped talking to users after product-market fit."
+
+**6. The honest/self-deprecating take**
+"I've been that person and it was embarrassing." Relatable vulnerability in a room full of people performing competence. Gets upvotes because it gives others permission to relate.
+
+Example: "genuinely thought I was the only one who spent 4 hours reformatting the same launch post. apparently not."
+
+---
+
+### What kills comments (data-backed)
+
+- **Generic agreement** — "this is so true!" adds nothing, gets ignored
+- **Long explanations without a sharp point** — nobody reads a wall of text in a comment section
+- **Internet slang** — lol, tbh, ngl used to signal credibility; now they signal low quality
+- **Hedged takes** — "well it depends..." without actually saying what it depends on and why
+- **The obvious answer** — if 5 other comments already said it, you're wasting a post
+- **Leading with "I"** — comments that start with "I think..." or "I believe..." get read as opinion, not insight
+- **Asserting without evidence** — "that's wrong" with no follow-up gets downvoted; "that's wrong because X" gets upvoted
+
+---
+
+### Comment quality self-check
+
+Before finalizing any comment, ask:
+- Does the first sentence make someone want to read the second?
+- Is there one specific thing in this comment that couldn't have been said by anyone?
+- If I saw this comment from a stranger, would I upvote it?
+- Does it add something the thread doesn't already have?
+
+If the answer to any of these is no, rewrite or skip the thread.
+
+---
+
 ## Phase 1 — Warm-Up (0 to 20 karma)
 
 No Dropspace mentions. No product links.
@@ -204,3 +266,4 @@ Weekly: which Type B topics generate the most engagement? Which Type A keywords 
 | Used marketing language | Downvoted | No marketing language |
 | Replied to hostile thread | Got into argument | Skip negative-tone threads |
 | Generic reply with no opinion | Got ignored | Every comment needs a take |
+
