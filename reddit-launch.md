@@ -41,26 +41,51 @@ r/AlphaandBetaUsers, r/AppIdeas, r/buildinpublic, r/business, r/Business_Ideas, 
 
 ## Workflow Per Post
 
-### Step 1 — Claw researches the subreddit
-- Fetches Hot posts from the last week via Reddit JSON API
-- Reads titles, post length, tone, link placement, comment patterns
-- Checks subreddit rules (karma requirements, flair, self-promo policy)
+### Step 1 — Study the 2-3 most viral posts in the subreddit (mandatory)
 
-### Step 2 — Claw drafts the post
-- Writes title + body tailored to that subreddit's observed style
+Fetch the subreddit's top posts sorted by Hot or Top (past week/month). Pull the 2-3 highest-upvoted non-pinned posts.
 
-### Step 3 — Claw runs the AI-check (mandatory, see below)
-- Every draft gets reviewed against the AI-check list before being sent
+For each viral post, extract and note:
+- Title pattern: question, statement, "I built X", rant, confession, data?
+- Opening line: does it start with a story, a fact, a frustration, a number?
+- Post length: one paragraph or five? Short punchy or detailed?
+- Tone and register: casual/slangy, technical, emotional, dry?
+- How they reference their own product/link: buried, upfront, not at all?
+- Specific words, phrases, or expressions that felt native to that sub
+- What the top comments say — are people roasting, relating, asking questions?
 
-### Step 4 — Send draft to user
-- Title, body, and direct submit link sent via Telegram
+Do not write anything until you have absorbed these patterns. The draft must mirror what you observed, not what you think sounds good.
 
-### Step 5 — Human posts manually
-- Copy-paste title and body, select flair if required, submit
+### Step 2 — Check subreddit requirements before writing
 
-### Step 6 — Claw logs the result
-- User confirms live or flags removed
-- Claw updates reddit-launch-log.md
+Pull the subreddit's rules and sidebar. Check and log:
+- **Mandatory flair**: does the sub require a flair to post? If yes, which ones exist and which fits best?
+- **Karma threshold**: minimum karma required to post? If the account karma is too low, flag to user immediately and skip the sub.
+- **Participation threshold**: does the sub require a minimum comment history or account age?
+- **Self-promotion rules**: is self-promotion allowed? Limited to certain days or threads? Banned outright?
+- **Link rules**: are external links allowed in posts or only in comments?
+
+If the sub has requirements we can't meet, tell the user immediately. Don't draft a post for a sub we can't post to.
+
+### Step 3 — Draft the post
+
+Write title and body tailored to what you observed in Step 1. Apply tone rules, persona rule, and hook rule below.
+
+### Step 4 — Run the AI-check (mandatory, see below)
+
+Every draft gets reviewed against the AI-check list before going anywhere.
+
+### Step 5 — Send draft to user
+
+Send via Telegram: subreddit name, any flair to select, title, body, direct submit link.
+
+### Step 6 — Human posts manually
+
+Copy-paste title and body, select flair if required, submit.
+
+### Step 7 — Claw logs the result
+
+User confirms live or flags removed. Claw updates reddit-launch-log.md.
 
 ---
 
@@ -130,18 +155,18 @@ This is the last step before the post goes out. Read the draft and flag anything
 ### Structural AI tells
 - Every paragraph does exactly one clean job — real writing is messier
 - Sentences are too uniformly medium-length — mix short and long unevenly
-- The post has a beginning, middle, end that are too distinct
-- Nothing is left unresolved or rough
+- The post has a clear beginning, middle, end arc — real posts are rougher
+- Nothing is left unresolved or slightly off
 
 ### The gut check
-Read the full draft out loud. If any sentence sounds like something a product landing page would say, cut it. If it sounds like a LinkedIn thought leader, cut it. If it sounds like a person typing quickly and not editing much, keep it.
+Read the full draft out loud. If any sentence sounds like something a product landing page would say, cut it. If it sounds like a LinkedIn thought leader, cut it. If it sounds like a person typing fast without editing much, keep it.
 
 ---
 
 ## If Something Goes Wrong
 
 - Post removed silently: check in incognito, log it, adjust angle or skip the sub
-- Karma gate blocks posting: note it, move on
+- Karma gate blocks posting: note it, flag to user, move on
 - Sub has strict self-promo rules: flag to user, decide together
 
 ---
@@ -150,6 +175,6 @@ Read the full draft out loud. If any sentence sounds like something a product la
 
 Log file: reddit-launch-log.md in workspace
 
-Per post: subreddit, title, date, outcome (live/removed/karma-gated), upvotes at 24h, notes.
+Per post: subreddit, title, date, flair used, outcome (live/removed/karma-gated), upvotes at 24h, notes.
 
 After day 6: review what lands. Double down on traction angles. Cut subs that keep removing.
