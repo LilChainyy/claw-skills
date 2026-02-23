@@ -35,20 +35,22 @@ Never: pure validation ("great point!"), empty agreement, self-promotion in a re
 
 Reply opportunities come from monitoring these accounts. Cyy can add/remove anytime.
 
-**AI / LLMs / Research**
-@sama @karpathy @ylecun @AnthropicAI @OpenAI @emollick @fchollet @ilyasut @gdb @AravindSrinivas @MistralAI @jeremyphoward @hardmaru @darioamodei
+**AI / LLMs / Research (niche, 10K-200K range)**
+@simonw @swyx @emollick @AravindSrinivas @hardmaru @ClementDelangue @tunguz @_akhaliq @miles_brundage @weights_biases @amasad @npew
 
-**Product / PM**
-@shreyas @lennyrachitsky @joulee @sriramk @johncutlefish @joshelman @cagan @andrewchen
+**Product / PM (niche voices)**
+@johncutlefish @gibsonbiddle @petergyang @aakashg0 @jackiebo @shreyas @lenny @sriramk @benedictevans
 
-**Deep tech / Robotics / Infra**
-@george_hotz @SpaceX @elonmusk @NvidiaAI @kelseyhightower @id_aa_carmack @amasad @brendandburns
+**Deep tech / Robotics / Infra (practitioners)**
+@kelseyhightower @brendandburns @george_hotz @deliprao @mark_riedl @id_aa_carmack @jeremyphoward
 
-**VC / Startup**
-@paulg @garrytan @pmarca @naval @benedictevans @hunterwalk @semil @Jason
+**VC / Startup (smaller, more signal)**
+@hunterwalk @semil @Jason @sarahtavel @niviachu @briannekimmel @jasonlk
 
-**Builder / Devtools / Indie**
-@levelsio @marc_louvion @dhh @swyx @rauchg @t3dotgg @addyosmani @simonw @pieter
+**Builder / Indie / Devtools (10K-100K)**
+@marc_louvion @tdinh_me @levelsio @t3dotgg @simonw @addyosmani @rauchg @therealgoodppl @dannypostmaa @swyx
+
+Note: avoid mega-accounts (Musk, Karpathy, Altman, Naval, pmarca) — threads too crowded to get visibility. Target people with 10K-200K followers where a good reply actually gets seen.
 
 ---
 
@@ -88,14 +90,14 @@ reply_score = reply_count * 5 + like_count + retweet_count * 2
 Prefer posts with high reply_count relative to likes — this means people are actively responding, which means your reply gets more visibility.
 
 Also prefer:
-- Posted 1-6 hours ago (early replies get more reach than late ones)
+- Posted within last 24 hours — hard cutoff, do not include anything older
 - Posts that are opinionated, make a claim, or ask a question
 - Posts where a smart reply could add something genuinely different
 
 Skip:
 - Pure announcements with no angle to add to
 - Posts already flooded with replies (buried)
-- Posts older than 24 hours
+- Posts older than 24 hours — strict cutoff, no exceptions
 - Threads (reply to the root, not mid-thread)
 
 ### Step 3 — Study top-performing replies on the chosen post
@@ -234,3 +236,4 @@ Options should be meaningfully different from each other — not three versions 
 After cyy posts, note which option was picked and outcome at 24h (likes, replies, did OP respond). Over time, track which patterns work best in which context.
 
 Log in: x-reply-log.md in workspace
+
