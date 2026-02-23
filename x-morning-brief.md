@@ -1,125 +1,134 @@
 ---
 name: x-morning-brief
-description: Twice-weekly morning research brief. Uses X API to find 5 noteworthy posts from cyy's niche areas — AI/LLMs, PM, deep tech, VC/startup, devtools. Delivered Monday and Wednesday at 8 AM. Pure research, no engagement required.
+description: Twice-weekly X research brief for cyy. Finds 5 noteworthy posts from AI/LLMs, PM, deep tech, VC/startup, and devtools using anchor account searches + topic filters. Runs Mon + Wed at 8 AM. Pure reading, no engagement. Send via Telegram.
 ---
 
 # X Morning Brief
 
 ## Purpose
 
-Find 5 X posts worth reading from the past few days. Not a summary — actual links. Covers what's stirring in cyy's niche circles whether or not they follow the person.
+Find 5 X posts worth reading from the past few days. Actual links, no summaries. Covers what's stirring in cyy's niche circles whether or not they follow the account.
 
-Runs Monday and Wednesday at 8 AM. Covers posts from the past 2-3 days.
+Runs Monday and Wednesday at 8 AM. Covers posts from the past 2-4 days.
 
 ---
 
 ## Credentials
 
-Bearer Token is stored in TOOLS.md. Load it from there before making any API calls.
-
----
-
-## Topic Areas
-
-1. **AI/LLMs** — model releases, research getting traction, infra shifts, agent/eval/reasoning debates
-2. **Product management** — frameworks, career takes, big product decisions, PM hot takes
-3. **Deep tech** — biotech, space, chips (TSMC/Nvidia/AMD), robotics
-4. **VC/startup** — notable rounds, fund news, investor market takes
-5. **Developer tools / devex** — new tool launches, paradigm shifts, workflow debates
+Bearer Token: stored in TOOLS.md under "X (Twitter) API"
 
 ---
 
 ## How to Run
 
-### Step 1 — Search each topic area via X API
+### Step 1 — Search each topic using anchor accounts + topic filter
 
-Use the recent search endpoint with engagement-based filtering:
+Use the X API recent search endpoint:
 
 ```
 GET https://api.twitter.com/2/tweets/search/recent
   ?query=QUERY
-  &max_results=20
-  &tweet.fields=public_metrics,author_id,created_at,entities
+  &max_results=10
+  &tweet.fields=public_metrics,created_at
   &expansions=author_id
-  &user.fields=name,username,public_metrics
+  &user.fields=name,username
   &sort_order=relevancy
 Authorization: Bearer TOKEN
 ```
 
-Run one query per topic area. Use these queries:
+**Queries (account-anchored + topic-filtered):**
 
-| Topic | Query |
-|---|---|
-| AI/LLMs | `(AI OR LLM OR "language model" OR "model release" OR "reasoning model") -is:retweet -is:reply lang:en min_faves:50` |
-| PM | `("product management" OR "product manager" OR "product decision" OR "PM take") -is:retweet -is:reply lang:en min_faves:30` |
-| Deep tech | `(biotech OR "space launch" OR semiconductor OR robotics OR "chip shortage" OR TSMC OR Nvidia) -is:retweet -is:reply lang:en min_faves:30` |
-| VC/startup | `(funding OR "Series A" OR "Series B" OR "seed round" OR "venture capital" OR VC) -is:retweet -is:reply lang:en min_faves:30` |
-| Devtools | `("developer tool" OR devex OR SDK OR "new framework" OR "dev workflow" OR "open source") -is:retweet -is:reply lang:en min_faves:30` |
-
-### Step 2 — Score and filter results
-
-From each topic's results, pick the single best post using this scoring:
-
-**Must pass:**
-- Posted in the last 3 days
-- At least 30 likes (50+ for AI topic)
-- Not a retweet, not a reply thread opener with no context
-
-**Prefer:**
-- High reply count relative to likes (signals debate, not just passive approval)
-- From accounts with 1K+ followers (but don't exclude smaller accounts if the content is strong)
-- Says something new, not just reacts to something older
-- Short and sharp over long and thorough
-
-**Skip:**
-- Engagement bait ("change my mind", "hot take:", "thread:")
-- Generic AI hype ("ChatGPT changed everything")
-- Fundraising announcements with no substance or context
-- Hustle/motivational content
-- Anything that just describes a feature release without analysis
-
-### Step 3 — Build the 5-post list
-
-Pick the single best post from each topic area. If one area had nothing noteworthy, replace it with a second pick from the strongest area that week.
-
-Construct a direct x.com link:
 ```
-https://x.com/[username]/status/[tweet_id]
+AI/LLMs:
+(from:sama OR from:karpathy OR from:ylecun OR from:AnthropicAI OR from:OpenAI OR from:emollick OR from:fchollet) (AI OR model OR LLM OR agent OR reasoning OR benchmark) -is:retweet lang:en
+
+PM/Product:
+(from:shreyas OR from:lennyrachitsky OR from:joulee OR from:sriramk OR from:joshelman OR from:cagan OR from:johncutlefish OR from:benedictevans) (product OR PM OR shipped OR strategy OR growth OR decision OR launch) -is:retweet lang:en
+
+Deep tech:
+(from:SpaceX OR from:EricTopol OR from:NvidiaAI OR from:darioamodei OR from:waitbutwhy OR from:elonmusk) (launch OR biotech OR chip OR robot OR space OR breakthrough OR hardware) -is:retweet lang:en
+
+VC/Startup:
+(from:paulg OR from:garrytan OR from:pmarca OR from:benedictevans OR from:naval OR from:hunterwalk OR from:semil) (startup OR funding OR founder OR market OR build OR company OR raise) -is:retweet lang:en
+
+Devtools:
+(from:dhh OR from:swyx OR from:rauchg OR from:kelseyhightower OR from:t3dotgg OR from:addyosmani OR from:simonw) (code OR developer OR tool OR framework OR open source OR shipped OR engineering OR CLI) -is:retweet lang:en
 ```
 
-### Step 4 — Send to cyy via Telegram
+### Step 2 — Pick best post per topic
+
+From each topic's results, pick the post with highest combined score:
+
+```
+score = like_count + (reply_count * 3)
+```
+
+Reply count is weighted higher because replies = debate = people actually engaging with the idea.
+
+### Step 3 — If a topic returns no results
+
+Expand to a broader search without account filter for that topic:
+
+```
+AI/LLMs fallback: (LLM OR "AI model" OR "model release" OR "new benchmark") -is:retweet -is:reply lang:en
+PM fallback: ("product strategy" OR "shipped today" OR "product lesson") -is:retweet -is:reply lang:en
+Deep tech fallback: (biotech OR semiconductor OR "rocket launch" OR robotics) -is:retweet -is:reply lang:en
+VC fallback: ("just raised" OR "seed round" OR "Series A" OR "new fund") -is:retweet -is:reply lang:en
+Devtools fallback: ("just open sourced" OR "shipped v" OR "new CLI" OR "developer tool") -is:retweet -is:reply lang:en
+```
+
+### Step 4 — Build the 5-post list
+
+Construct link: `https://x.com/[username]/status/[tweet_id]`
+
+### Step 5 — Send to cyy via Telegram
 
 Format:
 ```
 Morning brief — [Mon/Wed], [Date]
 
-1. [Why it's worth 2 min — not what it's about, why it matters now]
+1. [Why it's worth 2 min — not what it is, why it matters now]
    https://x.com/username/status/id
 
 2. ...
-
 3. ...
-
 4. ...
-
 5. ...
 ```
 
-The one-line description must say why it's worth reading today, not just describe the topic. Bad: "interesting AI post." Good: "Anthropic researcher on why reasoning models are hitting a wall on multi-step planning — specific and not the usual hype."
+One line per post. Say why it's worth reading today, not just what it's about.
+
+Bad: "OpenAI released a new benchmark"
+Good: "OpenAI's EVMbench: AI agents now autonomously detecting + patching smart contract vulnerabilities — first serious AI security eval"
 
 ---
 
 ## What "worth noting" means
 
-One of:
-- Changes how people think about something, not just confirms what they already believe
+- Changes how people think, not just confirms what they believe
 - Announces something that will matter in 6 months
-- A take so sharp or contrarian that it's generating real debate (check reply count)
-- From someone who has built/shipped something sharing firsthand observations
-- Signals a shift — something that would have been unsayable 6 months ago
+- A contrarian take generating real debate (high reply/like ratio)
+- Firsthand observation from someone who built or shipped something
+- Signals a shift in the field
+
+Skip: engagement bait, hustle content, generic ChatGPT amazement, pure fundraising PR with no substance
+
+---
+
+## Anchor Accounts Reference
+
+These are updated over time. Add accounts that consistently post signal.
+
+| Topic | Key accounts |
+|---|---|
+| AI/LLMs | @sama @karpathy @ylecun @AnthropicAI @OpenAI @emollick @fchollet |
+| PM/Product | @shreyas @lennyrachitsky @joulee @sriramk @johncutlefish @cagan |
+| Deep tech | @SpaceX @EricTopol @NvidiaAI @darioamodei @waitbutwhy |
+| VC/Startup | @paulg @garrytan @pmarca @naval @benedictevans @hunterwalk |
+| Devtools | @dhh @swyx @rauchg @kelseyhightower @t3dotgg @addyosmani @simonw |
 
 ---
 
 ## Schedule
 
-Monday and Wednesday at 8 AM cyy's local time. Timezone in MEMORY.md once confirmed.
+Monday and Wednesday at 8 AM cyy's timezone (see MEMORY.md once timezone confirmed).
