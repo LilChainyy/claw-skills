@@ -48,97 +48,108 @@ r/AlphaandBetaUsers, r/AppIdeas, r/buildinpublic, r/business, r/Business_Ideas, 
 
 ### Step 2 — Claw drafts the post
 - Writes title + body tailored to that subreddit's observed style
-- Sends draft to user via Telegram with direct link to submit page
 
-### Step 3 — Human posts manually
-- Open the subreddit submit link provided
-- Copy-paste title and body from Claw's draft
-- Select flair if required
-- Submit
+### Step 3 — Claw runs the AI-check (mandatory, see below)
+- Every draft gets reviewed against the AI-check list before being sent
 
-### Step 4 — Claw logs the result
-- User confirms post is live (or flags if removed)
-- Claw updates the tracking log
+### Step 4 — Send draft to user
+- Title, body, and direct submit link sent via Telegram
+
+### Step 5 — Human posts manually
+- Copy-paste title and body, select flair if required, submit
+
+### Step 6 — Claw logs the result
+- User confirms live or flags removed
+- Claw updates reddit-launch-log.md
 
 ---
 
 ## Tone Rules (non-negotiable)
 
-These came from studying what actually gets upvotes vs ignored vs downvoted.
-
 ### What works
-- **Brutally specific personal story** — not "I was frustrated by X" but "I got charged €15 for a JPEG that took 30 seconds"
-- **Casual to the point of rough** — write how you'd text a friend, not how you'd write a press release
-- **Product is secondary** — the story comes first, the link is buried and feels incidental
-- **Vulnerability gets replies** — "Four hours feels embarrassing to admit" invites engagement
-- **End with a hook** — not a CTA, not "check it out", but something that makes people want to roast you, disagree, or share their own experience
+- Brutally specific personal story — not "I was frustrated by X" but "I got charged 15 euros for a JPEG that took 30 seconds"
+- Casual to the point of rough — write how you'd text a friend, not a press release
+- Product is secondary — story first, link buried and incidental
+- Vulnerability gets replies — "four hours feels embarrassing to admit" invites engagement
+- End with a hook — something that makes people want to roast you, disagree, or share their own story
 
 ### What kills posts
-- Any pitch structure (problem → solution → CTA)
-- Marketing adjectives: "game-changing," "powerful," "seamless," "excited to share"
-- Phrases that sound like ad copy: "generates content tailored to each platform"
-- Generic endings: "Would love feedback!" or "Let me know what you think!"
-- Saying the product name like it's a brand announcement
+- Any pitch structure (problem, solution, CTA)
+- Marketing words: game-changing, powerful, seamless, excited to share, streamline, leverage, curated, tailored
+- Generic endings: "Would love feedback!" / "Let me know what you think!" / "Happy to answer questions!"
+- Announcing the product name like a brand launch
 
 ### The hook rule
-Every post must end with a line that does one of these:
-- Makes people want to roast/correct you ("Am I missing something obvious?")
-- Invites debate or a hot take ("Or is this just a solved problem nobody talks about?")
-- Surfaces a shared frustration and asks if they've felt it too
-- Is slightly self-deprecating in a way that's relatable
+End with one line that does one of:
+- Makes people want to correct or roast you ("am I missing something obvious?")
+- Invites a hot take or debate
+- Surfaces a shared frustration and asks if they felt it too
+- Is slightly self-deprecating in a relatable way
 
-**Examples of bad endings:**
-- "Would love your feedback on dropspace.dev"
-- "Happy to answer questions!"
-- "Let me know what you think"
-
-**Examples of good endings:**
-- "Four hours feels embarrassing to admit but I couldn't find a faster way. Am I missing something obvious?"
-- "Probably reinvented something that already exists. What are people actually using for this?"
-- "Still not sure if the problem is big enough to matter or if I just have terrible launch habits."
+Good: "Probably reinvented something that already exists. What are people actually using for this?"
+Good: "Still not sure if the problem is real or I just have bad launch habits."
+Bad: "Would love your feedback on dropspace.dev"
+Bad: "Happy to answer any questions!"
 
 ---
 
 ## Persona Rule
 
-Every post needs one sentence early on that grounds who is speaking. Not a bio. Just enough context to make the frustration feel human and earned.
+Every post needs one line early on that grounds who is speaking. Not a bio. Just enough to make the frustration feel earned.
 
-**Why it matters:** Without it, posts feel like they came from nowhere — a product floating in a void. One line of "who I am" makes the reader identify with you before you've said anything about what you built.
+Weave it into the first paragraph, one sentence max, match it to the subreddit audience.
 
-### How to use it
-- Weave it naturally into the first paragraph — never as a standalone intro line
-- One sentence max
-- Match the persona to the subreddit's audience
+Examples by sub type:
+- Solo/indie subs: "Been building side projects solo for a couple years, no co-founder, just shipping stuff and seeing what sticks."
+- Entrepreneur subs: "I run a small bootstrapped thing, so I'm the builder and the marketer and the person up at midnight copy-pasting into LinkedIn."
+- Side hustle subs: "I build things evenings and weekends, so any launch time I can cut actually matters."
+- SaaS/growth subs: "Launched a few products over the past couple years and the distribution side always takes longer than the build."
 
-### Persona options — pick the one that fits the sub
+Never open with "I'm an indie developer and I built..." — that's a bio, not a persona. Vary the line across posts, never reuse the same one.
 
-| Subreddit type | Persona line example |
-|---|---|
-| Indie/solo builder subs (r/SideProject, r/indiehackers, r/MicroSaas) | "I've been building solo projects for a couple years — no team, just me shipping things and figuring out distribution as I go." |
-| Entrepreneur/founder subs (r/Entrepreneur, r/startups) | "I run a small bootstrapped operation, which means I'm the builder, the marketer, and the person copy-pasting things into LinkedIn at midnight." |
-| Side hustle / passive income subs (r/thesidehustle, r/passive_income) | "I build things evenings and weekends alongside a day job, so every hour of launch work I can cut actually matters." |
-| Growth / SaaS subs (r/GrowthHacking, r/SaaS) | "I've launched a few products over the past couple years and the distribution side has always taken longer than the build." |
-| Community / general (r/productivity, r/business) | "I build software on the side and recently went through a launch that reminded me how much time the non-building parts actually take." |
+---
 
-### What not to do
-- Don't open with "I'm an indie developer and I built..." — that's a bio, not a persona
-- Don't make the persona the focus — it's one sentence, then move on
-- Don't use the same line across multiple posts — vary it
+## AI-Check (run this on every draft before sending)
+
+This is the last step before the post goes out. Read the draft and flag anything on this list. If you find it, rewrite that sentence.
+
+### Instant AI tells — kill on sight
+- Em dash used mid-sentence (—) — real people use commas or just end the sentence
+- "no team, just me" or any "not X, just Y" contrast pattern
+- "figuring out X as I go"
+- "hacked something together" / "cleaned it up"
+- "which means" as a connector
+- "the part I [emotion] most" (e.g. "the part I dreaded most")
+- Starting a paragraph with "So" for dramatic effect
+- "genuinely" as an intensifier anywhere
+- Three-part parallel lists that feel too neat
+- Any sentence that explains itself ("X, which means Y")
+- "I realized I needed to..."
+- "as I go" / "as it turns out" / "it turns out"
+
+### Structural AI tells
+- Every paragraph does exactly one clean job — real writing is messier
+- Sentences are too uniformly medium-length — mix short and long unevenly
+- The post has a beginning, middle, end that are too distinct
+- Nothing is left unresolved or rough
+
+### The gut check
+Read the full draft out loud. If any sentence sounds like something a product landing page would say, cut it. If it sounds like a LinkedIn thought leader, cut it. If it sounds like a person typing quickly and not editing much, keep it.
 
 ---
 
 ## If Something Goes Wrong
 
-- Post removed silently: check in incognito, log it, skip the sub or adjust angle
-- Karma gate blocks posting: note it, skip, come back later
-- Sub has strict self-promo rules: flag to user, decide together whether to skip
+- Post removed silently: check in incognito, log it, adjust angle or skip the sub
+- Karma gate blocks posting: note it, move on
+- Sub has strict self-promo rules: flag to user, decide together
 
 ---
 
 ## Track As You Go
 
-Log file: `reddit-launch-log.md` in workspace
+Log file: reddit-launch-log.md in workspace
 
-For each post: subreddit, title, date, outcome (live/removed/karma-gated), upvotes at 24h, notes.
+Per post: subreddit, title, date, outcome (live/removed/karma-gated), upvotes at 24h, notes.
 
-After day 6: review what's landing. Double down on angles with traction. Cut subs that keep removing.
+After day 6: review what lands. Double down on traction angles. Cut subs that keep removing.
