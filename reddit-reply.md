@@ -194,6 +194,43 @@ Short wins on Reddit. Long comments get skimmed. Short comments that say the thi
 
 ---
 
+## Freshness Rule (mandatory — run before building every daily batch)
+
+Every post in the daily 10 must be one you haven't engaged with before. Recycling old threads wastes the comment (OP has moved on) and makes the account look like a bot pattern.
+
+### How to enforce freshness
+
+**Step 1 — Pull from /new, not /hot or /top**
+Hot and Top posts are days or weeks old. /new is where fresh conversations are. Always fetch from `/new.json` when scanning for threads.
+
+**Step 2 — Age filter: under 24 hours only**
+Check the `created_utc` field on each post. Convert to hours since posting. Reject anything over 24 hours old. Exceptions allowed up to 48 hours only if the thread is still actively getting new comments.
+
+**Step 3 — Check against the used-posts log**
+Before adding a thread to the daily batch, check `reddit-used-posts.md` in the workspace. If the post URL is already there, skip it. No exceptions.
+
+**Step 4 — Log every post URL after the batch is sent**
+After generating the daily 10, append all 10 post URLs to `reddit-used-posts.md` with today's date. This is how future runs know what's been used.
+
+### reddit-used-posts.md format
+```
+## 2026-02-23
+- https://www.reddit.com/r/webdev/comments/1rcmvph/
+- https://www.reddit.com/r/webdev/comments/1rcq0pl/
+...
+
+## 2026-02-24
+- ...
+```
+
+### Why this matters
+- Commenting on a 3-day-old post gets ignored — OP and the thread have moved on
+- Reusing a post you already commented on looks spammy and can get flagged
+- Fresh threads mean your comment appears near the top when people are still reading
+- New posts on /new have fewer comments, so yours stands out more
+
+---
+
 ## Daily Output Format
 
 When running this skill, produce exactly this format — 10 entries, ready to hand to the user.
@@ -266,4 +303,5 @@ Weekly: which Type B topics generate the most engagement? Which Type A keywords 
 | Used marketing language | Downvoted | No marketing language |
 | Replied to hostile thread | Got into argument | Skip negative-tone threads |
 | Generic reply with no opinion | Got ignored | Every comment needs a take |
+
 
