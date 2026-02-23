@@ -94,6 +94,9 @@ Morning brief — [Mon/Wed], [Date]
 3. ...
 4. ...
 5. ...
+
+6. [Viral/Moment — why everyone in tech is talking about this today]
+   https://x.com/username/status/id
 ```
 
 One line per post. Say why it's worth reading today, not just what it's about.
@@ -115,6 +118,27 @@ Skip: engagement bait, hustle content, generic ChatGPT amazement, pure fundraisi
 
 ---
 
+
+## Viral / Funny Tech Moment
+
+Every brief includes one slot for something going viral in the tech/AI/builder circles — not because it's deep, but because everyone is talking about it and you should know the reference.
+
+This can be:
+- Something ironic or funny (e.g. a VP of Security at Meta having an AI agent delete her inbox)
+- A hot debate blowing up in builder circles
+- A meme, screenshot, or moment that's circulating widely
+- Anything that would come up if you were at a tech dinner that evening
+
+**How to find it:**
+Search anchor accounts for high reply-to-like ratio (replies > 10% of likes = debate/reaction). Also search broader viral tech queries:
+
+
+
+Pick the post with the highest reply_count / like_count ratio from any tech account — that signals a reaction moment, not passive consumption.
+
+Include as post 6 in the brief, labeled [Viral/Moment].
+
+---
 ## Anchor Accounts Reference
 
 These are updated over time. Add accounts that consistently post signal.
@@ -132,3 +156,4 @@ These are updated over time. Add accounts that consistently post signal.
 ## Schedule
 
 Monday and Wednesday at 8 AM cyy's timezone (see MEMORY.md once timezone confirmed).
+
