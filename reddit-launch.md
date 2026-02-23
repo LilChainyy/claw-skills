@@ -62,13 +62,40 @@ r/AlphaandBetaUsers, r/AppIdeas, r/buildinpublic, r/business, r/Business_Ideas, 
 
 ---
 
-## Writing Rules (always apply)
+## Tone Rules (non-negotiable)
 
-- No marketing language — "game-changing," "revolutionary," "excited to share" are instant downvotes
-- Lead with the problem or a personal observation, not the product
-- The link feels like an afterthought, not the point
-- End with a real question when natural — it invites replies
-- Every post must be meaningfully different — different angle, opening, structure
+These came from studying what actually gets upvotes vs ignored vs downvoted.
+
+### What works
+- **Brutally specific personal story** — not "I was frustrated by X" but "I got charged €15 for a JPEG that took 30 seconds"
+- **Casual to the point of rough** — write how you'd text a friend, not how you'd write a press release
+- **Product is secondary** — the story comes first, the link is buried and feels incidental
+- **Vulnerability gets replies** — "Four hours feels embarrassing to admit" invites engagement
+- **End with a hook** — not a CTA, not "check it out", but something that makes people want to roast you, disagree, or share their own experience
+
+### What kills posts
+- Any pitch structure (problem → solution → CTA)
+- Marketing adjectives: "game-changing," "powerful," "seamless," "excited to share"
+- Phrases that sound like ad copy: "generates content tailored to each platform"
+- Generic endings: "Would love feedback!" or "Let me know what you think!"
+- Saying the product name like it's a brand announcement
+
+### The hook rule
+Every post must end with a line that does one of these:
+- Makes people want to roast/correct you ("Am I missing something obvious?")
+- Invites debate or a hot take ("Or is this just a solved problem nobody talks about?")
+- Surfaces a shared frustration and asks if they've felt it too
+- Is slightly self-deprecating in a way that's relatable
+
+**Examples of bad endings:**
+- "Would love your feedback on dropspace.dev"
+- "Happy to answer questions!"
+- "Let me know what you think"
+
+**Examples of good endings:**
+- "Four hours feels embarrassing to admit but I couldn't find a faster way. Am I missing something obvious?"
+- "Probably reinvented something that already exists. What are people actually using for this?"
+- "Still not sure if the problem is big enough to matter or if I just have terrible launch habits."
 
 ---
 
