@@ -28,7 +28,7 @@ Use the X API recent search endpoint:
 ```
 GET https://api.twitter.com/2/tweets/search/recent
   ?query=QUERY
-  &max_results=10
+  &max_results=5
   &tweet.fields=public_metrics,created_at
   &expansions=author_id
   &user.fields=name,username
@@ -67,17 +67,9 @@ Reply count is weighted higher because replies = debate = people actually engagi
 
 ### Step 3 — If a topic returns no results
 
-Expand to a broader search without account filter for that topic:
+Skip it. Do not fire a fallback query. Include only the topics that returned results. A 4-post brief is fine.
 
-```
-AI/LLMs fallback: (LLM OR "AI model" OR "model release" OR "new benchmark") -is:retweet -is:reply lang:en
-PM fallback: ("product strategy" OR "shipped today" OR "product lesson") -is:retweet -is:reply lang:en
-Deep tech fallback: (biotech OR semiconductor OR "rocket launch" OR robotics) -is:retweet -is:reply lang:en
-VC fallback: ("just raised" OR "seed round" OR "Series A" OR "new fund") -is:retweet -is:reply lang:en
-Devtools fallback: ("just open sourced" OR "shipped v" OR "new CLI" OR "developer tool") -is:retweet -is:reply lang:en
-```
-
-### Step 4 — Build the 5-post list
+### Step 4 — Build the post list
 
 Construct link: `https://x.com/[username]/status/[tweet_id]`
 
