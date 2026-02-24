@@ -30,6 +30,7 @@ Every Monday, scrape the latest issue from 3 curated job newsletters. Filter for
 
 **Hard filters — skip these:**
 - Software Engineer, SWE, Backend, Frontend, Full-Stack
+- Chief of Staff (any title with "Chief of Staff")
 - VC / Investor / Principal (unless it's an operator role at a fund)
 - Data Scientist, ML Engineer, AI Researcher
 - Finance-only (CFO, Controller, FP&A without product exposure)
