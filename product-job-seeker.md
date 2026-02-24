@@ -36,10 +36,16 @@ Every Monday, scrape the latest issue from 3 curated job newsletters. Filter for
 - Roles requiring 5+ years of PM/product experience
 - Roles requiring MBA preferred/required (unless waivable by shipped product experience)
 
+**Location filter (hard):**
+- New York, NY: yes
+- SF Bay Area (San Francisco, San Jose, Oakland, South Bay): yes
+- Remote — only include if the company's team/HQ is in NY or SF Bay Area. Check the company's About page or Crunchbase if unsure. If team location is unknown and it's a fully distributed company, skip it.
+- Canada Remote, London, Europe, Austin, etc.: skip
+- "US Remote" with no clear NY/SF anchor: skip unless you can confirm the team sits in NY or SF
+
 **Soft criteria — use judgment:**
 - Prefer roles at AI/tech companies or AI-adjacent (healthtech, fintech, devtools, B2B SaaS)
 - Prefer 0-4 years experience requirements (cyy can stretch to 5 if the JD is vague)
-- Prefer remote or US-based (NY preferred but not required)
 - Slight stretch is OK: if the JD says "2-3 years PM experience" and cyy has adjacent experience + shipped product, flag it with a note
 - If it's a product-adjacent role (e.g., Strategy & Ops at an AI company), it's in scope
 
