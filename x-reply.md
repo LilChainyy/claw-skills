@@ -1,15 +1,15 @@
 ---
 name: x-reply
-description: Daily X reply engine for cyy. Studies high-performing replies under big accounts in AI, PM, deep tech, infra, VC, builder circles. Generates 5 comment opportunities per day with 2-3 ready-to-paste options each. Delivered by 2 PM EST. Human posts manually.
+description: 3x/week X reply engine for cyy (Mon/Wed/Fri). Finds 5 posts from niche accounts in AI, PM, deep tech, VC, builder circles. Generates 2-3 reply options each. Delivered by 2 PM EST. Human posts manually.
 ---
 
 # X Reply Engine
 
 ## Purpose
 
-Find 5 posts from key accounts worth replying to today. For each, draft 2-3 reply options. Cyy picks one and posts manually. Goal: get seen in the right conversations, build presence in tech/PM/builder circles.
+Find 5 posts from key accounts worth replying to. For each, draft 2-3 reply options. Cyy picks one and posts manually. Goal: get seen in the right conversations, build presence in tech/PM/builder circles.
 
-Delivered by 2 PM EST daily.
+Delivered Mon/Wed/Fri by 2 PM EST.
 
 ---
 
@@ -68,7 +68,7 @@ For each topic cluster, search recent posts:
 ```
 GET https://api.twitter.com/2/tweets/search/recent
   ?query=QUERY
-  &max_results=10
+  &max_results=5
   &tweet.fields=public_metrics,created_at,conversation_id
   &expansions=author_id
   &user.fields=name,username
@@ -105,32 +105,11 @@ Skip:
 - Posts older than 24 hours — strict cutoff, no exceptions
 - Threads (reply to the root, not mid-thread)
 
-### Step 3 — Study top-performing replies on the chosen post
+### Step 3 — Draft 2-3 reply options per post
 
-Pull the conversation to see what replies are getting engagement:
+Write in cyy's persona (Mode A or B based on thread). Apply all rules below. Use the pattern library in "What Gets Engagement" below — no live conversation pull needed.
 
-```
-GET https://api.twitter.com/2/tweets/search/recent
-  ?query=conversation_id:TWEET_ID -from:AUTHOR_USERNAME
-  &max_results=20
-  &tweet.fields=public_metrics
-  &sort_order=relevancy
-```
-
-Look at the replies with highest like_count. Note:
-- Length (characters)
-- Structure (one sentence vs two, question vs statement)
-- Whether they agree, disagree, add a dimension, or ask something
-- Tone (dry, sharp, funny, earnest)
-- What the top reply says that the OP didn't
-
-This trains the draft for that specific post's context.
-
-### Step 4 — Draft 2-3 reply options per post
-
-Write in cyy's persona (Mode A or B based on thread). Apply all rules below.
-
-### Step 5 — Output to cyy by 2 PM EST via Telegram
+### Step 4 — Output to cyy by 2 PM EST via Telegram
 
 ---
 
