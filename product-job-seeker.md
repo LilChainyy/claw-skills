@@ -125,34 +125,61 @@ For each selected role:
   Example: `https://www.linkedin.com/jobs/search/?keywords=Product+Manager&f_C=Metronome`
 - Note: LinkedIn search links find the company page, not always the exact listing — tell cyy to verify
 
-### Step 5 — Send via Telegram
+### Step 5 — Generate Excel file and send via Telegram
 
-Format:
+Generate an Excel file with all selected roles, then send it as a file attachment via Telegram.
+
+**Excel columns:**
+- Rank
+- Role
+- Company
+- Location
+- Why It Fits (1 sentence)
+- Exp Required
+- Apply Link (direct URL to job listing)
+- LinkedIn Search (constructed URL)
+- Source (newsletter name)
+
+**How to generate the Excel file:**
+
+Use the exec tool to run this Node.js script (xlsx module is at `/home/cyy/.npm-global/lib/node_modules/xlsx`):
+
+```js
+const XLSX = require('/home/cyy/.npm-global/lib/node_modules/xlsx');
+
+const jobs = [ /* array of job objects with the 9 columns */ ];
+
+const wb = XLSX.utils.book_new();
+const ws = XLSX.utils.json_to_sheet(jobs);
+ws['!cols'] = [
+  { wch: 6 },  // Rank
+  { wch: 38 }, // Role
+  { wch: 32 }, // Company
+  { wch: 28 }, // Location
+  { wch: 65 }, // Why It Fits
+  { wch: 22 }, // Exp Required
+  { wch: 58 }, // Apply Link
+  { wch: 58 }, // LinkedIn Search
+  { wch: 18 }, // Source
+];
+XLSX.utils.book_append_sheet(wb, ws, 'Jobs');
+
+const filename = `/home/cyy/.openclaw/workspace/job-brief-${DATE}.xlsx`;
+XLSX.writeFile(wb, filename);
 ```
-Job brief — Monday, [Date]
 
-Sources scanned: Beyond Bay St. | Job Hunting Sux | Ali Rohde Jobs ([paywalled — skipped] if applicable)
+Replace `DATE` with the current date (YYYY-MM-DD format).
 
----
-
-1. [Role Title] — [Company] | [Location]
-   Why it fits: [1 sentence — what makes this a match for cyy's background]
-   Years required: [X] | Apply: [direct link]
-   LinkedIn: [linkedin search or job URL]
-
-2. [Role Title] — [Company] | [Location]
-   Why it fits: [1 sentence]
-   Years required: [X] | Apply: [direct link]
-   LinkedIn: [linkedin search or job URL]
-
-[...through 10-15]
-
----
-Stretch picks (flag if included):
-[Any roles that are a stretch but worth considering — labeled clearly]
+**Then send via Telegram using the message tool:**
+```
+action: send
+channel: telegram
+target: 8560730620
+filePath: /home/cyy/.openclaw/workspace/job-brief-[DATE].xlsx
+caption: "Job brief — [Date]. [N] roles from [sources]. Fresh from this week's issues."
 ```
 
-Keep each entry to 3 lines max. No walls of text.
+No plain-text job list needed — the Excel file is the deliverable.
 
 ---
 
