@@ -55,7 +55,15 @@ Strategy & Ops, Chief of Staff, BizOps across U.S. and Canada. Most structured n
 2. Find the most recent post URL (first link in the list)
 3. Fetch that post's full content
 
-### 2. Job Hunting Sux (jobhuntingsux.com)
+### 2. Next PM Role (nextpmrole.substack.com)
+PM-specific newsletter, spun off from Beyond Bay St. Covers Product Manager roles across U.S. and Canada. High signal for cyy's target roles.
+
+**How to get latest issue:**
+1. Fetch: `https://nextpmrole.substack.com/archive`
+2. Find the most recent post URL (first link in the list)
+3. Fetch that post's full content
+
+### 3. Job Hunting Sux (jobhuntingsux.com)
 Curated tech, consumer, and entertainment jobs. Narrative style with embedded job links. Skews startup/tech.
 
 **How to get latest issue:**
@@ -63,7 +71,7 @@ Curated tech, consumer, and entertainment jobs. Narrative style with embedded jo
 2. Find the most recent post URL (first link in the list)
 3. Fetch that post's full content
 
-### 3. Ali Rohde Jobs (alirohdejobs.substack.com)
+### 4. Ali Rohde Jobs (alirohdejobs.substack.com)
 Chief of Staff, BizOps, VC roles in tech. May be paywalled — if content is empty or footer-only, skip and note it.
 
 **How to get latest issue:**
