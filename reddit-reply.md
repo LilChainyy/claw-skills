@@ -1,9 +1,9 @@
 ---
 name: reddit-reply
-description: "Daily Reddit comment engine. Two phases: Phase 1 (0-20 karma) pure warm-up. Phase 2 (20+ karma) generates 3 Reddit opportunities per run — Dropspace intent threads and adjacent tech/building topics. Human posts manually."
+description: "Daily Reddit comment engine. Two phases: Phase 1 (0-20 karma) pure warm-up. Phase 2 (20+ karma) generates 5 Reddit opportunities per run — Dropspace intent threads and adjacent tech/building topics. Human posts manually."
 ---
 
-# Reddit Reply — Daily 3 Opportunities
+# Reddit Reply — Daily 5 Opportunities
 
 ## What This Skill Outputs
 
@@ -49,6 +49,32 @@ What doesn't work: correct answers, helpful suggestions, balanced takes, "great 
 The voice to write in: **you're a person in a conversation, not a helpful resource.** You've seen this fail. You're slightly exasperated. You have an edge without being hostile. You don't feel the need to explain yourself.
 
 The "anyway" test: "one reorg away from collapsing *anyway*" — that "anyway" is dismissive in exactly the right way. It signals you've seen this before and the outcome is predictable. If your comment could be posted on LinkedIn without sounding weird, rewrite it.
+
+### Frustration signals — the highest-signal thread type
+
+**The best threads to comment on are ones where the OP is visibly frustrated.** Frustration posts get more comments, more lurkers, and more upvotes on replies — because the audience isn't just reading the question, they're feeling the same thing.
+
+What frustration looks like in a post:
+- "I don't understand why X keeps happening"
+- "Am I missing something or is this just broken"
+- "Spent [X hours/days/weeks] on this and still can't figure out..."
+- "Why does everyone say [thing] when clearly [other thing]"
+- "Nobody talks about how hard [obvious thing] actually is"
+- "I keep seeing [advice] but it never works for me"
+- Long rant with no clear question at the end
+- Post title with a question mark AND an exclamation or ellipsis ("Why is this so hard??" / "Is this really how it works...")
+
+Why frustration threads outperform neutral ones:
+1. OP is emotionally engaged — they'll reply to a comment that names their pain
+2. Lurkers in the same situation are actively looking for validation
+3. The "yes, finally someone said it" upvote is far more common in frustration threads than information threads
+4. A comment that names the systemic reason for the frustration (Pattern F) hits 10x harder when the frustration is already on the surface
+
+**Thread selection priority order:**
+1. Frustrated OP + sub with jaded/experienced audience (r/ExperiencedDevs, r/startups) = highest yield
+2. Frustrated OP + any builder/indie sub = high yield
+3. Neutral question + experienced audience = medium yield
+4. Neutral question + beginner sub = low yield — skip these
 
 ---
 
@@ -213,12 +239,12 @@ Goal: make the account look like a real person with a history before any product
 
 ### Types of content in the daily batch
 
-Each batch of 3 mixes two types:
+Each batch of 5 mixes two types:
 
-**Type A — Dropspace intent (1 per batch)**
+**Type A — Dropspace intent (1-2 per batch)**
 Threads where someone is experiencing the pain Dropspace solves. Reply with the persona, product mention comes last and softly.
 
-**Type B — Adjacent persona content (2 per batch)**
+**Type B — Adjacent persona content (3-4 per batch)**
 Threads about tech, building, indie hacking, tools, shipping, distribution — where the persona can say something genuinely useful, funny, or opinionated without mentioning Dropspace at all. These build karma, credibility, and voice.
 
 The ratio matters. An account that only comments when it can mention its product looks like a bot. One that has real opinions across many threads looks like a person.
@@ -321,7 +347,7 @@ Check the `created_utc` field on each post. Convert to hours since posting. Reje
 Before adding a thread to the daily batch, check `reddit-used-posts.md` in the workspace. If the post URL is already there, skip it. No exceptions.
 
 **Step 4 — Log every post URL after the batch is sent**
-After generating the batch, append all 3 post URLs to `reddit-used-posts.md` with today's date. This is how future runs know what's been used.
+After generating the batch, append all 5 post URLs to `reddit-used-posts.md` with today's date. This is how future runs know what's been used.
 
 ### reddit-used-posts.md format
 ```
@@ -344,24 +370,36 @@ After generating the batch, append all 3 post URLs to `reddit-used-posts.md` wit
 
 ## Daily Output Format
 
-When running this skill, produce exactly this format — 3 entries, ready to hand to the user.
+When running this skill, produce exactly this format — 5 entries, ready to hand to the user.
 
 ```
---- REDDIT DAILY 3 — [DATE] ---
+--- REDDIT DAILY 5 — [DATE] ---
 
-1. [TYPE A / TYPE B]
+1. [TYPE A / TYPE B] | Pattern [A/B/C/D/E/F] | Frustration thread: [yes/no]
    Sub: r/[subreddit]
    Thread: [title] — [direct URL]
    Comment:
    [paste-ready comment text]
 
-2. [TYPE A / TYPE B]
+2. [TYPE A / TYPE B] | Pattern [A/B/C/D/E/F] | Frustration thread: [yes/no]
    Sub: r/[subreddit]
    Thread: [title] — [direct URL]
    Comment:
    [paste-ready comment text]
 
-3. [TYPE A / TYPE B]
+3. [TYPE A / TYPE B] | Pattern [A/B/C/D/E/F] | Frustration thread: [yes/no]
+   Sub: r/[subreddit]
+   Thread: [title] — [direct URL]
+   Comment:
+   [paste-ready comment text]
+
+4. [TYPE A / TYPE B] | Pattern [A/B/C/D/E/F] | Frustration thread: [yes/no]
+   Sub: r/[subreddit]
+   Thread: [title] — [direct URL]
+   Comment:
+   [paste-ready comment text]
+
+5. [TYPE A / TYPE B] | Pattern [A/B/C/D/E/F] | Frustration thread: [yes/no]
    Sub: r/[subreddit]
    Thread: [title] — [direct URL]
    Comment:
