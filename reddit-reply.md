@@ -78,9 +78,11 @@ Correct a common assumption. Land with something quotable.
 
 > "the '1-5 rating where some people always get 1s and 2s' IS stack ranking with extra steps. the only honest version would be to just say 'we rank people' but that phrase killed careers in too many press cycles so nobody uses it."
 
-**Pattern D — Stop + do this instead**
-For posts where OP is doing the wrong thing entirely. Direct, no softening.
+**Pattern D — Stop + do this instead** ⭐ Highest upvote yield
+For posts where OP is doing the wrong thing entirely. Direct, no softening. No question at the end — end with a confident statement, not an ask.
+Start with the imperative. Include one specific number. Dismiss one thing OP thinks matters.
 
+Confirmed 3 upvotes on a 2-upvote post (outperformed the thread):
 > "stop polishing. find 5 people who'd actually use it and watch them try. what they can't figure out is worth more than 3 months of cleanup. patents are almost never relevant at this stage."
 
 **Pattern E — Name the feeling nobody said out loud**
@@ -88,15 +90,41 @@ For emotional/frustration posts. One sentence that says what everyone in the thr
 
 > "it's usually not arrogance. it's people protecting their mental model of a codebase they've lived in for 3 years. feels like ego from outside, feels like defending correctness from inside."
 
+**Pattern F — Systemic Diagnosis** ⭐ Highest upvote yield on experienced subs
+Don't answer OP's personal question. Name the structural/systemic pattern above OP's situation.
+Use one specific, visceral phrase ("one reorg away from collapsing", "this org is already in decline"). End with "the question isn't X" — challenge the frame OP is stuck in.
+Write for the 200 lurkers who've lived this, not for OP.
+
+Confirmed 18 upvotes on a 9-upvote post (2x the post's own score):
+> "a team with too many leaders and not enough executors is usually one reorg away from collapsing anyway. the question isn't whether you can grow there [implied: it's whether you should leave]"
+
+Best subs for Pattern F: r/ExperiencedDevs, r/programming, r/cscareerquestions, r/devops — anywhere with a jaded, been-around audience.
+
 ---
 
 ### What the latest batch confirmed about length and structure
 
 - 2-3 sentences is the sweet spot. 1 sentence can work if it's sharp enough. 4+ sentences needs a very good reason.
 - Never use bullet points in a comment. Ever.
-- The question at the end should be specific — not "what do you think?" but "what does CAC come out to on Google vs Meta?"
-- A comment that makes OP reply is worth 10x a comment that gets upvoted silently.
 - Don't soften your take. "I think this might possibly be..." gets ignored. "This is backwards." gets replies.
+
+### Questions vs Statements — choose based on goal
+
+**Question at the end** → optimizes for OP replies (engagement, thread growth)
+**Confident statement at the end** → optimizes for lurker upvotes (karma)
+
+For karma building: **prefer statements**. A declarative closer ("patents are almost never relevant at this stage") gives lurkers something to vote on. A question gives OP something to respond to. Both have value, but upvotes come from lurkers who never reply.
+
+Confirmed from live data: both high-upvote comments (18 upvotes, 3 upvotes) ended with statements, not questions.
+
+### Timing — first 2 hours is the upvote window
+
+Target threads under 2 hours old when possible. Early comments get seen while the thread is still building momentum. The same comment posted at hour 8 vs hour 1 gets roughly 4x fewer upvotes because Reddit's "Best" sort compounds early votes.
+
+Under 2 hours: high priority
+2-6 hours: good
+6-24 hours: acceptable, diminishing returns
+Over 24 hours: skip unless thread is unusually active
 
 ---
 
@@ -338,6 +366,16 @@ Notes on the format:
 - 20-50 karma: Phase 2 but stick to smaller subs
 - 50-100 karma: most subs unlocked
 - 100+ karma: full access including r/Entrepreneur, r/startups, r/SaaS
+
+---
+
+## Account Notes
+
+**Ok_Topic8344** — use for posts (submissions). Confirmed working on small subs. Needs karma buildup before large subs.
+
+**dropspaceapp** — spam-flagged for posts (every submission removed by Reddit filters). However, comments from this account work fine — confirmed 18 upvotes and 3 upvotes on comments from live data. Can be used for comment warm-up and karma building even though it cannot post.
+
+If running this skill for comment warm-up only: both accounts are viable. If the end goal is a post going live: use Ok_Topic8344 only.
 
 ---
 
