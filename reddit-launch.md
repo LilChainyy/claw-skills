@@ -56,16 +56,61 @@ For each viral post, extract and note:
 
 Do not write anything until you have absorbed these patterns. The draft must mirror what you observed, not what you think sounds good.
 
-### Step 2 — Check subreddit requirements before writing
+### Step 2 — Classify the subreddit before writing anything
 
-Pull the subreddit's rules and sidebar. Check and log:
-- **Mandatory flair**: does the sub require a flair to post? If yes, which ones exist and which fits best?
-- **Karma threshold**: minimum karma required to post? If the account karma is too low, flag to user immediately and skip the sub.
-- **Participation threshold**: does the sub require a minimum comment history or account age?
-- **Self-promotion rules**: is self-promotion allowed? Limited to certain days or threads? Banned outright?
-- **Link rules**: are external links allowed in posts or only in comments?
+Fetch the subreddit's rules (`/r/SUBNAME/about/rules.json`) and the pinned/stickied posts. Read them fully. Then classify the sub into one of three types. **The type determines the entire post approach — do not skip this step.**
 
-If the sub has requirements we can't meet, tell the user immediately. Don't draft a post for a sub we can't post to.
+---
+
+**Type A — Story-only subs (no product mentions, no links in body)**
+
+Rules usually contain: "no self-promotion", "no spam", "no solicitation", "no affiliate links"
+
+Approach:
+- Post is 100% story. Zero product pitch structure. No "I built X to solve Y" framing.
+- Dropspace is mentioned once, naturally, as something you happen to use — not as the subject of the post.
+- **No URL anywhere in the post body.** Drop it as a comment after the post goes live.
+- If the story doesn't work without naming the product at all, write it without the name and see if it's still worth posting.
+
+Subs: r/SideProject, r/indiehackers, r/startups, r/Entrepreneur, r/SaaS, r/webdev, r/buildinpublic, r/Solopreneur, r/smallbusiness, r/GrowthHacking, r/productivity, r/passive_income
+
+---
+
+**Type B — Builder/indie subs (product OK if buried, link in comment)**
+
+Rules are loose. Self-promotion tolerated if the post adds value. Upvote culture rewards authenticity.
+
+Approach:
+- Story-first still applies, but you can reference Dropspace more directly.
+- Name the product once. Don't pitch it. Let the story sell it.
+- **URL goes in a comment after posting, not in the body.** Body can say "built something for this — link in comments."
+- Flair if required.
+
+Subs: r/scaleinpublic, r/MicroSaas, r/micro_saas, r/indiebiz, r/vibecoding, r/EntrepreneurRideAlong, r/juststart, r/thesidehustle, r/Entrepreneurs, r/Business_Ideas, r/startup, r/Startup_Ideas, r/growmybusiness, r/AlphaandBetaUsers, r/AppIdeas, r/InternetIsBeautiful
+
+---
+
+**Type C — Resource/disclosure subs (product mention required, structured format)**
+
+Rules explicitly require affiliation disclosure and a structured recommendation format.
+
+Approach:
+- Follow the sub's exact required format.
+- Disclose affiliation explicitly: "I am a founder of Dropspace."
+- Include any mandatory sentences the sub requires verbatim.
+- URL is allowed in body for these subs — it's expected.
+- Still avoid pitch language. Describe what it does, not how great it is.
+
+Subs: r/startup_resources (requires "My post comply with the rules." verbatim)
+
+---
+
+**Also check and log before drafting:**
+- **Mandatory flair**: which flair is required, which fits best
+- **Karma threshold**: if account karma is too low, stop and flag to user — don't draft
+- **Title format**: some subs require `[Product] - Description` format
+
+**If the sub type is unclear, default to Type A rules.**
 
 ### Step 3 — Draft the post
 
@@ -75,9 +120,31 @@ Write title and body tailored to what you observed in Step 1. Apply tone rules, 
 
 Every draft gets reviewed against the AI-check list before going anywhere.
 
+### Step 4b — Pre-submission checklist (run before sending to user)
+
+Answer every question. If any answer is NO, fix before sending.
+
+**Rules compliance:**
+- [ ] Did I read this sub's actual rules (not assume)?
+- [ ] Did I classify it as Type A / B / C?
+- [ ] Does the post match that type's approach?
+- [ ] Is there any pitch language, CTA, or "would love feedback"?
+- [ ] For Type A/B: is the URL OUT of the post body?
+- [ ] For Type C: is the mandatory sentence included verbatim?
+- [ ] Would Reddit's pre-submission rule check flag this for "solicitation" or "spam"? If yes, rewrite.
+
+**Content:**
+- [ ] No em dashes
+- [ ] No "genuinely", "which means", "as it turns out", "I realized I needed to"
+- [ ] No marketing words (seamless, powerful, game-changing, streamline)
+- [ ] Reads like a person, not a product page
+
+**Send to user:**
+Tell user: sub type (A/B/C), flair if any, where to drop the URL (body vs comment), submit link.
+
 ### Step 5 — Send draft to user
 
-Send via Telegram: subreddit name, any flair to select, title, body, direct submit link.
+Send via Telegram: subreddit name, sub type (A/B/C), any flair to select, title, body, where to put the URL (body or comment after posting), direct submit link.
 
 ### Step 6 — Human posts manually
 
@@ -98,11 +165,22 @@ User confirms live or flags removed. Claw updates reddit-launch-log.md.
 - Vulnerability gets replies — "four hours feels embarrassing to admit" invites engagement
 - End with a hook — something that makes people want to roast you, disagree, or share their own story
 
+### URL rule (global, non-negotiable)
+
+**Never put the URL in the post body unless the sub is Type C.**
+
+For Type A and Type B subs: post body has no URL. After the post goes live, drop a comment like:
+> "Link if anyone wants it: dropspace.dev"
+
+Comment links are filtered far less aggressively than body links. Putting the URL in the body is the #1 trigger for Reddit's site-wide spam filter, regardless of account karma or post quality.
+
 ### What kills posts
+- URL in the post body (for Type A and Type B subs)
 - Any pitch structure (problem, solution, CTA)
 - Marketing words: game-changing, powerful, seamless, excited to share, streamline, leverage, curated, tailored
 - Generic endings: "Would love feedback!" / "Let me know what you think!" / "Happy to answer questions!"
 - Announcing the product name like a brand launch
+- Post body that reads like a product description
 
 ### The hook rule
 End with one line that does one of:
@@ -160,6 +238,26 @@ This is the last step before the post goes out. Read the draft and flag anything
 
 ### The gut check
 Read the full draft out loud. If any sentence sounds like something a product landing page would say, cut it. If it sounds like a LinkedIn thought leader, cut it. If it sounds like a person typing fast without editing much, keep it.
+
+---
+
+## Known Subs — Confirmed Rules (update as you go)
+
+| Subreddit | Type | Karma needed | URL in body? | Notes |
+|---|---|---|---|---|
+| r/scaleinpublic | B | ~3 (confirmed) | No | ✅ confirmed working Feb 2026 |
+| r/SideProject | A | ~100 | No | Large sub, Reddit spam filter strict |
+| r/startup_resources | C | unknown | Yes | Requires "My post comply with the rules." verbatim. Disclosure mandatory. Still flagged for solicitation — treat as Type A story, just add disclosure line. |
+| r/SaaS | A | ~50 | No | |
+| r/indiehackers | A | ~50 | No | |
+| r/startups | A | ~100 | No | |
+| r/Entrepreneur | A | ~100 | No | |
+| r/MicroSaas | B | unknown | No | |
+| r/micro_saas | B | unknown | No | |
+| r/vibecoding | B | unknown | No | |
+| r/buildinpublic | A | ~50 | No | |
+
+Add rows here after each attempt. Log: sub, type, karma at time of post, result (live/removed/reason).
 
 ---
 
