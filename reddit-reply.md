@@ -1,13 +1,13 @@
 ---
 name: reddit-reply
-description: Daily Reddit content engine. Two-phase: Phase 1 (0-20 karma) pure warm-up comments. Phase 2 (20+ karma) generate a daily batch of 10 Reddit opportunities — a mix of Dropspace intent threads and adjacent tech/building topics where the persona can comment something helpful, fun, or sassy. Human does the final manual step. Output is a ready-to-use daily list.
+description: "Daily Reddit comment engine. Two phases: Phase 1 (0-20 karma) pure warm-up. Phase 2 (20+ karma) generates 3 Reddit opportunities per run — Dropspace intent threads and adjacent tech/building topics. Human posts manually."
 ---
 
-# Reddit Reply — Daily 10 Opportunities
+# Reddit Reply — Daily 3 Opportunities
 
 ## What This Skill Outputs
 
-Every time you run this skill, it produces a list of 10 Reddit threads to engage with today — including:
+Every time you run this skill, it produces a list of 3 Reddit threads to engage with today — including:
 - The subreddit
 - Direct link to the thread
 - A short, ready-to-paste comment or post reply
@@ -169,12 +169,12 @@ Goal: make the account look like a real person with a history before any product
 
 ### Types of content in the daily batch
 
-Each daily batch of 10 mixes two types:
+Each batch of 3 mixes two types:
 
-**Type A — Dropspace intent (3-4 per day)**
+**Type A — Dropspace intent (1 per batch)**
 Threads where someone is experiencing the pain Dropspace solves. Reply with the persona, product mention comes last and softly.
 
-**Type B — Adjacent persona content (6-7 per day)**
+**Type B — Adjacent persona content (2 per batch)**
 Threads about tech, building, indie hacking, tools, shipping, distribution — where the persona can say something genuinely useful, funny, or opinionated without mentioning Dropspace at all. These build karma, credibility, and voice.
 
 The ratio matters. An account that only comments when it can mention its product looks like a bot. One that has real opinions across many threads looks like a person.
@@ -238,7 +238,30 @@ Short wins on Reddit. Long comments get skimmed. Short comments that say the thi
 
 ---
 
-## Freshness Rule (mandatory — run before building every daily batch)
+## Subreddit Diversity Rule (mandatory)
+
+**Every batch must span at least 2 different subreddits.** Never put all 3 comments in the same sub.
+
+**Goal: reach 30 unique subreddits over time.**
+
+Track unique subreddits engaged in `reddit-used-posts.md` under a running list:
+
+```
+## Subreddits Engaged (X / 30)
+- r/webdev
+- r/SideProject
+- r/indiehackers
+...
+```
+
+When picking threads for a batch, prioritise subreddits NOT yet on the list. Once 30 unique subs have been engaged, the goal is complete — at that point focus on depth (returning to best-performing subs) over breadth.
+
+**Allowed subreddit pool for warm-up + engagement:**
+r/webdev, r/SideProject, r/indiehackers, r/buildinpublic, r/startups, r/Entrepreneur, r/SaaS, r/programming, r/learnprogramming, r/ExperiencedDevs, r/Solopreneur, r/smallbusiness, r/GrowthHacking, r/micro_saas, r/MicroSaas, r/scaleinpublic, r/vibecoding, r/AppIdeas, r/InternetIsBeautiful, r/indiebiz, r/startup_resources, r/EntrepreneurRideAlong, r/juststart, r/thesidehustle, r/passive_income, r/productivity, r/Startup_Ideas, r/Business_Ideas, r/growmybusiness, r/AlphaandBetaUsers
+
+---
+
+## Freshness Rule (mandatory — run before building every batch)
 
 Every post in the daily 10 must be one you haven't engaged with before. Recycling old threads wastes the comment (OP has moved on) and makes the account look like a bot pattern.
 
@@ -254,7 +277,7 @@ Check the `created_utc` field on each post. Convert to hours since posting. Reje
 Before adding a thread to the daily batch, check `reddit-used-posts.md` in the workspace. If the post URL is already there, skip it. No exceptions.
 
 **Step 4 — Log every post URL after the batch is sent**
-After generating the daily 10, append all 10 post URLs to `reddit-used-posts.md` with today's date. This is how future runs know what's been used.
+After generating the batch, append all 3 post URLs to `reddit-used-posts.md` with today's date. This is how future runs know what's been used.
 
 ### reddit-used-posts.md format
 ```
@@ -277,10 +300,10 @@ After generating the daily 10, append all 10 post URLs to `reddit-used-posts.md`
 
 ## Daily Output Format
 
-When running this skill, produce exactly this format — 10 entries, ready to hand to the user.
+When running this skill, produce exactly this format — 3 entries, ready to hand to the user.
 
 ```
---- REDDIT DAILY 10 — [DATE] ---
+--- REDDIT DAILY 3 — [DATE] ---
 
 1. [TYPE A / TYPE B]
    Sub: r/[subreddit]
@@ -294,7 +317,11 @@ When running this skill, produce exactly this format — 10 entries, ready to ha
    Comment:
    [paste-ready comment text]
 
-...
+3. [TYPE A / TYPE B]
+   Sub: r/[subreddit]
+   Thread: [title] — [direct URL]
+   Comment:
+   [paste-ready comment text]
 ```
 
 Notes on the format:
