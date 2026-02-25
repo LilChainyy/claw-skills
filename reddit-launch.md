@@ -282,7 +282,7 @@ After day 6: review what lands. Double down on traction angles. Cut subs that ke
 
 ## Customer Subreddit Posts (separate from the 29-sub builder campaign)
 
-Once `Ok_Topic8344` has sufficient karma (~50+), the BIP post series also works in customer subs. The framing is different — these audiences don't care about building, they care about outcomes.
+Once the posting account has sufficient karma (~50+), the BIP post series also works in customer subs. The framing is different — these audiences don't care about building, they care about outcomes.
 
 **Target customer subs for posts:**
 - r/smallbusiness — owner-operators, 530K subs, low spam threshold
