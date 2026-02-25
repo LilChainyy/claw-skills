@@ -1,28 +1,21 @@
 ---
 name: startup-research
-description: Research a target startup company in depth for job applications and interviews. Given a company URL, produces a structured brief covering product, funding, team, traction, culture, competitive landscape, and interview prep angles.
+description: Research target startup companies and execute a direct outreach application strategy. Produces a research brief plus a tailored one-pager and DM script for reaching the founding team directly — no resume, no ATS black hole.
 ---
 
-# Startup Research
+# Startup Research + Direct Outreach
 
 ## Purpose
 
-Produce a research brief on a target company before applying or interviewing. The goal is to know the company well enough to:
-- Answer "why this company" credibly
-- Demonstrate product understanding in a screening call
-- Ask smart questions that signal strategic thinking
-- Spot red flags before wasting time in a long process
+Two-phase skill:
+1. **Research** — know the company well enough to write something the founder actually reads
+2. **Outreach** — one-pager + DM to founding team, not a resume into an ATS
+
+The goal is a 15-minute call booked by a founding team member. Not an application confirmation email.
 
 ---
 
-## Input
-
-- Company URL (required)
-- Role(s) targeting (optional — helps focus the brief)
-
----
-
-## Research Process
+## Phase 1 — Research
 
 ### Step 1 — Homepage and About/Team pages
 
@@ -33,84 +26,177 @@ Extract:
 - Who it's for (ICP)
 - What the core differentiator claim is
 - Founder names and any bios visible on site
+- Any live metrics (ARR, customers, usage stats)
 
 ### Step 2 — Funding and stage
 
-Fetch Crunchbase:
-`https://www.crunchbase.com/organization/[company-slug]`
-
-If Crunchbase is blocked, try:
+Fetch Crunchbase or try:
 - `https://techcrunch.com/search/?q=[company+name]`
-- `https://www.linkedin.com/company/[company-slug]/about/`
+- `https://api.ashbyhq.com/posting-api/job-board/[company-slug]` (Ashby API — returns full JD text including investor mentions, team background, comp)
 
 Extract:
-- Funding stage (Seed / Series A / B / C / etc.)
-- Total raised
-- Last round: date, amount, lead investor
-- All investor names (signals prestige and network)
+- Funding stage and total raised
+- Investors (tier-1 signals, strategic signals, angels)
 - Founded year
 
-### Step 3 — Team and headcount
+### Step 3 — Job listings via Ashby API
 
-Fetch LinkedIn company page if possible:
-`https://www.linkedin.com/company/[company-slug]/`
+Always try: `https://api.ashbyhq.com/posting-api/job-board/[company-slug]?includeCompensation=true`
 
-Extract:
-- Current headcount
-- Headcount 6 months ago if shown (growth rate signal)
-- Any notable recent hires (VP/Director level = growth signal)
+This is often the richest source — JDs contain investor names, team backgrounds, culture framing, and comp ranges that aren't on the website.
 
-Also check the founders on LinkedIn individually:
-- Prior companies, prior roles (relevant domain expertise?)
-- Any prior exits?
+### Step 4 — Team and founders
 
-### Step 4 — Recent news and announcements
+For direct outreach, finding named founders is mandatory. Try in order:
+1. Company website /team or /about page
+2. JD text (often mentions founders or CEO by name)
+3. LinkedIn company page → People tab (requires login but headers are visible)
+4. YC directory if YC-backed: `https://www.ycombinator.com/companies?query=[name]`
+5. Tracxn, Crunchbase, PitchBook
+6. Press releases from Business Wire, PR Newswire
+7. Portfolio pages of known investors (e.g., greylock.com/portfolio/[name])
 
-Search:
-`https://news.google.com/search?q=[company+name]`
-or fetch the company blog at `/blog` or `/news`.
+### Step 5 — Recent news and product velocity
 
-Extract:
-- Any press coverage in the last 3 months
-- Product launches, new features, partnerships
-- Any layoffs, pivots, leadership departures (red flags)
-
-### Step 5 — Traction signals
-
-Check the company website for:
-- Named customers or logos on site
-- Case studies (B2B) or testimonials
-- "Trusted by X companies" counts
-
-Check job postings (company careers page or LinkedIn jobs):
-- How many open roles?
-- What functions are they hiring? (Engineering = building; Sales = GTM push; Finance = pre-exit prep)
-- Are JDs well-written? (Signal of organizational maturity)
+Fetch the company blog. Check for:
+- How fast are they shipping? (weekly = high velocity, monthly = moderate)
+- What are they writing about? (signals priorities and thesis)
+- Are founders writing posts themselves? (signals hands-on culture)
+- Any recent funding announcements, case studies, product launches
 
 ### Step 6 — Competitive landscape
 
-Search: `[company name] vs [competitor]` or `[company name] alternatives`
-
-Identify:
+Search `[company name] vs [competitor]` or `[company name] alternatives`. Understand:
 - 2-3 direct competitors
-- How the company differentiates (their claim vs. what you can verify)
-- Where the market is heading (is this company ahead, behind, or carving a niche?)
+- How the company differentiates
+- Whether the market is large and defensible
 
-### Step 7 — Culture and vibe
+### Step 7 — Culture and intensity signals
 
-Check:
-- Glassdoor: `https://www.glassdoor.com/Search/results.htm?keyword=[company+name]`
-- LinkedIn posts by founders (how do they talk publicly?)
-- Tone and language in job postings (startup grindy vs. process-heavy)
-- Remote/hybrid/in-office policy (check careers page)
-
-Red flags on Glassdoor: management changes, comp complaints, "fast-paced" used as warning not selling point.
+Read every JD carefully for:
+- Explicit hour expectations (6 days/week, 9-9-5, weekend sprints)
+- Values language (is it founder-written or HR-template?)
+- What "fast track" looks like (equity, title, responsibility)
+- Remote/hybrid/onsite policy
 
 ---
 
-## Output Format
+## Phase 2 — Direct Outreach Application
 
-Save the brief to: `research/[company-slug].md` in the workspace.
+### The Approach
+
+Do not apply through the ATS form as your primary move. At companies with <100 people, the founding team reads their own DMs on LinkedIn and X/Twitter. A one-pager sent directly to a co-founder converts at a dramatically higher rate than a resume submitted through Ashby or Greenhouse.
+
+Sequence:
+1. Research (Phase 1)
+2. Write the one-pager (company-specific, role-specific)
+3. Find who to message (founder, CEO, or direct hiring manager)
+4. Send the DM — ultra short, one-pager attached or linked
+5. Follow up once after 3-4 days if no response
+6. Submit the ATS form as a backup, not the primary move
+
+### One-Pager Structure
+
+One page. PDF or Notion link. Never a Word doc. Never a resume.
+
+---
+
+**[Company Name] × [Your Name]**
+**[Role Title]**
+
+**Why this company (2-3 sentences)**
+Not "I'm excited about AI." Something specific that shows you read the product.
+Example: "Your Cultivate engine using weather data to trigger outbound before a customer even calls is the most differentiated feature in home services AI. No generic AI platform does this — it requires domain knowledge Netic clearly has."
+
+**Why this role (2-3 bullets)**
+Mapped directly to what the JD actually says, not generic PM/ops talking points.
+- [Specific responsibility from JD] → [Your specific proof point]
+- [Specific responsibility from JD] → [Your specific proof point]
+- [Specific responsibility from JD] → [Your specific proof point]
+
+**What I bring (3-4 bullets)**
+Concrete proof points only. No soft skills language.
+- [Quantified outcome or named company/role]
+- [Specific domain knowledge relevant to their ICP or product]
+- [Specific tool/skill they'd care about]
+- [Evidence of ownership/ambiguity tolerance if relevant]
+
+**One thing I noticed**
+1-2 sentences. An observation about their product, market, or customer problem that shows you're already thinking like someone on the team. This is the part most candidates skip. It's what separates a read from a pass.
+Example: "The $12,337 single-close quote from the skeptical technician is the most interesting traction signal on your site — it means even resistant users convert once they see the outcome."
+
+**What I'm asking for**
+"15 minutes." Not "please review my application."
+
+[LinkedIn URL] [Email or X handle if relevant]
+
+---
+
+### DM Script
+
+**Version A (with attached one-pager):**
+> Hey [Name] — I put together a one-pager on why I want the [Role] seat at [Company]. [One specific thing you noticed about the product or market]. Happy to send my background separately if you'd prefer that first — either way, love 15 minutes.
+
+**Version B (opening hook, ask to send):**
+> Hey [Name] — I've been following [specific thing] at [Company] closely. Put together a one-pager on why I want the [Role] seat. Can I send it over?
+
+Keep it under 75 words. The DM is a door knock, not a pitch. The one-pager does the work.
+
+### Where to Find Founders
+
+**LinkedIn:**
+- Search company name → People tab → filter by Co-Founder, CEO, CTO
+- Also search "[Name] [Company] founder" directly
+
+**X/Twitter:**
+- Search "[Company] founder" or "[CEO name]"
+- Check if founders are active (recent posts = they're reading DMs)
+- Active founders on X respond to DMs faster than LinkedIn
+
+**Priority for outreach:**
+1. Co-founder/CEO (most direct, highest conversion at <50 person companies)
+2. Hiring manager (VP Product, Head of Ops, etc. — if role is specialized)
+3. CTO or Head of Engineering (good for FDE/deployment roles)
+4. Skip: recruiters, HR, generic careers email
+
+### Platform Choice
+
+**Use X DM if:**
+- Founder posts regularly (>1x per week) — they're checking DMs
+- Founder has <50K followers — more accessible
+- The company is tech-native (AI, devtools, infra)
+
+**Use LinkedIn DM if:**
+- Founder isn't active on X
+- Company is more enterprise or ops-focused
+- You have mutual connections (mention them)
+
+**Email if:**
+- You can find it (pattern: firstname@company.com, try Hunter.io)
+- Founders aren't responsive on social
+- Subject line: "[Company] × [Your Name] — [Role]"
+
+### Follow-Up Rule
+
+One follow-up after 3-4 business days. Keep it one sentence:
+> "Following up on my note — happy to send anything else that'd be useful."
+
+If no response after that: submit ATS application and move on. Don't triple-tap.
+
+### Cadence
+
+One company per day. No more. Each outreach takes real preparation time, and mass-applying one-pagers is worse than one great one.
+
+Suggested workflow:
+- Morning: research the company, read the JD, find the founder
+- Afternoon: write the one-pager (45-60 min max — if it takes longer you're overthinking it)
+- Evening: send the DM
+
+---
+
+## Research Brief Output Format
+
+Save to: `research/[company-slug].md`
 
 ---
 
@@ -118,133 +204,62 @@ Save the brief to: `research/[company-slug].md` in the workspace.
 
 **Date:** [YYYY-MM-DD]
 **URL:** [url]
-**Role(s) targeting:** [role or TBD]
-
----
+**Role targeting:** [role + comp if known]
 
 ## TL;DR
-
 [2 sentences. What they do and why it's interesting. No marketing speak.]
 
----
-
 ## Product
-
-- **What it does:** [plain English]
-- **Who it's for:** [ICP — company size, role, industry]
-- **Core claim:** [their differentiator in one line]
-- **Pricing model:** [usage / seat / enterprise contract / unknown]
-- **Stage of product:** [early beta / growth / scaling / mature]
-
----
+- What it does (plain English)
+- Who it's for (ICP)
+- Core differentiator claim
+- Pricing model
+- Stage of product
 
 ## Funding
-
-| Field | Detail |
-|---|---|
-| Stage | [Seed / Series A / B / C] |
-| Total raised | [$X] |
-| Last round | [Date — $X — Lead investor] |
+| Stage | [stage] |
+| Total | [$XM] |
+| Last round | [date, amount, lead] |
 | Investors | [list] |
-| Founded | [year] |
-
-**Runway read:** [e.g. "Series B in 2024, likely 18-24 months runway, currently hiring aggressively"]
-
----
 
 ## Team
+- Founders: [names, backgrounds]
+- Key leadership
+- Headcount estimate
+- Hiring velocity
 
-- **Founders:** [names, backgrounds, prior exits if any]
-- **Key leadership:** [CEO, CPO, VP Eng, etc. — relevant context]
-- **Headcount:** [~X on LinkedIn as of date]
-- **Hiring velocity:** [growing fast / stable / slowing / unclear]
-
----
-
-## Traction Signals
-
-- Named customers: [list or "none visible"]
-- Press mentions (last 3 months): [list or "none found"]
-- Recent launches: [product updates, partnerships, etc.]
-- Job posting volume: [X open roles — signal of growth]
-
----
+## Traction
+- Named customers + outcomes
+- Metrics on site
+- Product shipping velocity
 
 ## Competitive Landscape
-
-- **Direct competitors:** [list]
-- **Differentiation:** [how they claim to be different]
-- **Market read:** [is the space crowded? is this company differentiated or a me-too?]
-
----
+- Direct competitors
+- Their differentiation
+- Market read
 
 ## Culture and Vibe
+- Work model (onsite/hybrid/remote)
+- Intensity signals from JDs
+- Founder visibility
 
-- **Work model:** [remote / hybrid / in-office / unknown]
-- **Glassdoor:** [rating if available, key themes from reviews]
-- **Founder public presence:** [active on LinkedIn/X? What's their tone?]
-- **Job posting tone:** [signal of culture — scrappy, process-heavy, values-forward, etc.]
+## The Role
+- What it actually is (decoded from JD language)
+- Who they're imagining (background, trajectory)
+- Red flags or strong fits
 
----
+## Who to Message
+- Name, title, platform preference
+- Active on X: [yes/no + handle]
+- LinkedIn: [profile URL if found]
+
+## One-Pager Angles
+- Why this company (specific insight to lead with)
+- Why this role (3 proof point hooks)
+- One thing I noticed (the observation that shows you're already thinking like a team member)
 
 ## Red Flags
-
-[Anything concerning: long funding gap, layoffs, pivot history, founder departures, negative press]
-
-If nothing found: "None identified. Continue monitoring."
-
----
-
-## Role Fit
-
-- **Open roles relevant to me:** [list]
-- **What the JDs imply:** [what function the company is investing in; who you'd work with]
-- **Likely interview process:** [based on company stage and any Glassdoor data]
-
----
-
-## Interview Prep
-
-### Talking points (show homework)
-
-1. [Specific recent development — e.g. "I saw you just launched X last month — how is early adoption looking?"]
-2. [Product angle that shows you understand the space — e.g. "The per-account agent model is interesting vs. the batch-scoring approach most tools use"]
-3. [Market/competitor angle — optional]
-
-### Questions to ask
-
-1. [Strategic question about product direction]
-2. [Question about team/role scope that signals you think in terms of impact]
-3. [Honest question about stage/growth that shows you've thought about risk]
-
-**Example questions (adapt to company):**
-- "What's the biggest thing that needs to be true for this company to work at the next stage of scale?"
-- "How does the team measure whether [core product function] is actually working?"
-- "What does the first 90 days look like for this role — what would a strong start look like vs. a slow one?"
-
----
-
-## Open Questions
-
-[Things you couldn't find or verify — worth asking in interview or researching further]
-
----
+[Anything concerning]
 
 ## Sources
-
-[List of URLs fetched during research]
-
----
-
-## Worked Example — actively.ai
-
-**TL;DR:** Actively AI deploys per-account AI agents for enterprise GTM teams — each agent retains context, learns from outcomes, and drives next-best-action for SDRs, AEs, and AMs. Targets large enterprise sales orgs that want AI to work continuously across their full TAM, not just assist reps ad hoc.
-
-**Product:** Custom model trained on a company's specific GTM data + per-account agents that research, understand, reason, and improve over time. Competes with generic AI sales tools (Clay, Outreach AI, Salesforce Einstein) by claiming custom model training as the differentiator.
-
-**What to look up:**
-- Crunchbase: funding stage, investors (likely Series A/B given "enterprise" positioning + SOC2)
-- LinkedIn: headcount growth (AI GTM is hot in 2025-2026)
-- Recent blog: "Building Context Graphs for GTM" — read it before any interview, it's their technical differentiation argument
-
-**Smart question for this company:** "The custom model angle is the core differentiator claim — how long does model training take for a new enterprise customer, and what does the onboarding funnel look like today?"
+[URLs fetched]
