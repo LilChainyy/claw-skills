@@ -13,13 +13,6 @@ Nothing else. No Dropspace. No links. No product mentions. The account needs kar
 
 ---
 
-## Accounts
-
-**Ok_Topic8344** — use for all warm-up comments. Currently low karma. Needs to reach 50+ before any promotional activity.
-
-**dropspaceapp** — do NOT use this skill for that account. It has its own skill (`reddit-customer-comment.md`) for comment-based conversion.
-
----
 
 ## The Persona
 
@@ -187,11 +180,10 @@ SLOT 2
 ## Karma Thresholds (when warm-up phase ends)
 
 - 0-50 karma: warm-up only (this skill)
-- 50+ karma: Ok_Topic8344 can begin posting BIP content via `reddit-launch.md`
-- Promotional comments from Ok_Topic8344: never. That account is for posts only. Promotional comments use `dropspaceapp` via `reddit-customer-comment.md`.
+- 50+ karma: account can begin posting BIP content via `reddit-launch.md` and running `reddit-customer-comment.md`
 
 ---
 
 ## Shadowban Check
 
-Every few days: open incognito, go to reddit.com/u/Ok_Topic8344. If recent comments don't appear, stop all activity immediately and flag.
+Every few days: open incognito, go to your account profile URL. If recent comments don't appear, stop all activity immediately and flag.
