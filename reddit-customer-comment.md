@@ -13,13 +13,6 @@ This is not a warm-up skill. Every comment has a purpose: get someone to visit d
 
 ---
 
-## Account
-
-**`dropspaceapp`** — use this account for all promotional comments. It has ~19 karma and confirmed comment history (18 upvotes and 3 upvotes confirmed from live data). It cannot post (site-level flagged), but comments work.
-
-**`Ok_Topic8344`** — do NOT use for promotional comments. That account is for BIP posts and warm-up only.
-
----
 
 ## The Conversion Model
 
