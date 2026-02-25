@@ -127,7 +127,7 @@ The account should have at minimum a 10:1 ratio of organic:promotional comments 
 - If karma drops: stop and investigate (downvote campaigns can happen)
 
 **Shadowban check:**
-Before each run: open incognito, go to reddit.com/u/dropspaceapp. If recent comments don't appear, stop all activity.
+Before each run: open incognito, go to your account profile URL. If recent comments don't appear, stop all activity.
 
 ---
 
@@ -235,8 +235,6 @@ Sub: r/[subreddit]
 Thread: [title]
 URL: [direct link to thread]
 Thread type: [Explicit ask / Active frustration / Process question]
-Account: dropspaceapp
-
 [paste-ready comment — includes dropspace.dev inline, no UTM, plain domain]
 
 ---
@@ -252,8 +250,6 @@ SLOT O1
 Sub: r/[subreddit]
 Thread: [title]
 URL: [direct link]
-Account: dropspaceapp
-
 [paste-ready organic comment — no product, no link]
 
 ---
