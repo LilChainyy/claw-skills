@@ -276,3 +276,40 @@ Log file: reddit-launch-log.md in workspace
 Per post: subreddit, title, date, flair used, outcome (live/removed/karma-gated), upvotes at 24h, notes.
 
 After day 6: review what lands. Double down on traction angles. Cut subs that keep removing.
+
+
+---
+
+## Customer Subreddit Posts (separate from the 29-sub builder campaign)
+
+Once `Ok_Topic8344` has sufficient karma (~50+), the BIP post series also works in customer subs. The framing is different — these audiences don't care about building, they care about outcomes.
+
+**Target customer subs for posts:**
+- r/smallbusiness — owner-operators, 530K subs, low spam threshold
+- r/socialmediamarketing — SMBs and marketers, 700K subs
+- r/Etsy — shop owners, 300K subs
+
+**Framing shift for customer subs:**
+
+In builder subs: "Here's what I built and why"
+In customer subs: "Here's what we changed and what happened"
+
+The product is still buried. The story is still first. But the story is from the perspective of a business operator saving time, not a developer shipping a product.
+
+**Customer sub BIP post structure:**
+- Open with a specific operational problem (not a product launch)
+- One sentence persona: "We run [business type], so I'm the builder and the marketer."
+- Honest numbers (even if small — 0s and single digits)
+- The learning is the story, not the product
+- Drop link in first comment after posting: "dropspace.dev if anyone wants to try the same setup"
+
+**The BIP Week 1 post works in r/smallbusiness with this adjusted title:**
+`Week 1 of automating our launch posts across 3 platforms — honest numbers`
+
+Apply the same AI-check and pre-submission checklist from above before sending to user.
+
+**Customer sub rules that differ from builder subs:**
+- r/smallbusiness: no links of any kind in post body, no direct pitching, personal story only → Type A
+- r/socialmediamarketing: rule against advertising tools; post must discuss learnings, not recommend → Type A
+- r/Etsy: generally lenient on "here's my workflow" posts → Type B
+
