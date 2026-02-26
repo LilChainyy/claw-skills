@@ -195,56 +195,60 @@ Three comment structures that work. Choose based on what Step 2 told you the thr
 
 ### Structure 1 — The Tools List (use when thread is explicitly asking for tool recommendations)
 
-List 3-4 options. Dropspace is one of them. You're being helpful by giving options, not pitching one thing.
+List 3-4 tools. Dropspace is one of them. You're being helpful by giving options.
 
-Why it works: you're not saying "use this." You're saying "here are options, pick what fits." That reads as genuine. The person asking still sees Dropspace and can click. And the comment is more upvoteable because it's actually useful to everyone in the thread, not just OP.
+Use **third-party framing** for the Dropspace entry — "someone pointed me to dropspace.dev" or "a friend mentioned dropspace.dev." This removes the founder/user signal. Add a hedge: "still testing it" or "still playing with it."
 
 Template:
-> "depends on what you need. Buffer is good for scheduling but gets expensive fast. Later is better for visual planning. Dropspace (dropspace.dev) if you're writing one announcement and need it reformatted for every platform automatically. Hootsuite if you need team access."
+> "what stuck: Claude, Cursor, Perplexity. someone pointed me to dropspace.dev for the content side recently — write once, formats for each platform. still testing it. everything else I tried added a new daily step, these ones removed steps."
 
-Verify before using: does this sub have other comments like this where people list options? If yes, use it. If the thread vibe is "just recommend one thing," go to Structure 2 instead.
+Verify before using: do top comments list tools? If yes, use it. If the thread is "just recommend one thing," go to Structure 2.
 
 ---
 
-### Structure 2 — The First-Person Experience (use when thread is frustration or consistency focused)
+### Structure 2 — The Peer Tip (use when thread is frustration or consistency focused)
 
-You had this problem. Here's what changed. Dropspace is the answer, but phrased as what fixed your workflow, not as a product pitch.
+Validate OP's exact pain in their own words. Then pass along a tip a friend gave you. You're not the product user — a friend is.
+
+**Key rule: always use third-party framing.** "My friend sent me" / "someone in a similar situation told me about" — not "I use." This is the single most important thing that makes it not sound like marketing.
+
+**Add a hedge.** "Still playing with it" / "haven't fully committed yet" — makes it a tip, not an endorsement.
+
+**No parenthetical link format.** Drop the URL plain in the sentence: `dropspace.dev` not `Dropspace (dropspace.dev)`.
 
 Template:
-> "the reformatting part is what killed consistency for me, not actually creating the content. once we automated that with Dropspace (dropspace.dev) the posting part stopped being the bottleneck. took maybe a day to set up."
+> "rewriting the same thing differently for instagram vs facebook vs tiktok eats up my time. my friend sent me dropspace.dev to cross platform post. im still playing with it"
 
-What makes it convert: "killed consistency for me" mirrors OP's language. "Not actually creating the content" names the sub-problem they described. "Took a day to set up" is a concrete, credible detail that builds trust.
-
-Add one imperfection: "not perfect but it handles the annoying part." Perfection claims are an instant credibility killer on Reddit.
+What makes it convert: it names OP's specific pain (reformatting per platform), the framing is a friend sharing a find, the hedge ("still playing with it") makes it feel like honest curiosity rather than a pitch. OP clicks to see what the friend found.
 
 ---
 
-### Structure 3 — The Reframe + Mention (use when thread is about habits/consistency, not tools)
+### Structure 3 — The Reframe + Peer Tip (use when thread is about habits/consistency, not tools)
 
-OP thinks their problem is willpower or motivation. Reframe it as a systems problem. Dropspace is the system.
+OP thinks their problem is willpower. Reframe it as friction. Then pass along what helped.
 
 Template:
-> "consistency on social isn't really a motivation problem, it's a friction problem. the more steps between 'I wrote this' and 'it's posted everywhere' the less likely it happens. we cut that to almost zero with Dropspace (dropspace.dev) — one input, it handles the rest. motivation part got a lot easier once the process stopped being annoying."
-
-What makes it convert: reframing the problem makes OP feel seen and understood (not judged for lacking motivation). The product mention comes after the insight, so it feels like a tool that supports the insight, not the point of the comment.
+> "consistency on social isn't really a motivation problem, it's a friction problem. the more steps between 'I wrote this' and 'it's posted everywhere' the less likely it happens. someone showed me dropspace.dev — write it once and it handles the rest. still figuring it out but the friction part got better."
 
 ---
 
 ## The Dropspace Mention Rules
 
 **Always:**
-- Plain domain: `dropspace.dev`
-- Inline in the comment — not a separate reply
-- Lowercase, no "Check out", no "Sign up", no CTA
-- Parenthetical preferred: `Dropspace (dropspace.dev)` or just `dropspace.dev` in context
+- Plain URL in the sentence: `dropspace.dev`
+- Third-party framing: "my friend sent me", "someone pointed me to", "a friend mentioned"
+- Hedge: "still playing with it", "still testing it", "still figuring it out"
+- Validate OP's specific pain *before* the mention — never lead with the product
 
 **Never:**
-- UTM parameters: never under any circumstances
-- "I built this" — makes it a pitch
-- Feature lists — nobody reads them; outcomes only
+- Parenthetical format: `Dropspace (dropspace.dev)` — looks like a formatted ad
+- UTM parameters: never
+- "I use this tool" / "I built this" — first-person product ownership sounds like a founder pitch
+- "Check out", "sign up", "try it" — CTA language
+- Feature lists — outcomes only, one sentence max
 - Superlatives: "amazing", "game-changer", "best"
-- Full URL with https and trailing slash — looks promotional
-- Mentioning Dropspace in a thread where no tool recommendation fits naturally (skip and do a clean organic comment instead)
+- Full URL with https:// — plain domain only
+- Mentioning Dropspace when no tool mention fits naturally (write an organic comment instead)
 
 **When to skip the mention:**
 If the thread is emotional (grief, burnout, existential) and the top comments are all support-focused, don't drop a tool link. Leave an organic comment that builds account credibility. That's more valuable long-term than a promotional comment that gets downvoted.
@@ -386,3 +390,6 @@ SLOT O2
 | Tool mention in emotional thread | Got downvoted, felt wrong | Skip promo when thread is support-focused |
 | Features list in comment | Nobody read it | Outcomes only, no feature descriptions |
 | Tools-list without checking if that style fits | Felt out of place | Always do Step 2 before writing |
+| First-person product ownership ("I use Dropspace") | Sounds like founder/marketer | Use third-party framing: "my friend sent me" |
+| Parenthetical link format `Dropspace (dropspace.dev)` | Looks like a formatted ad | Plain URL in sentence only |
+| Full endorsement with no hedge | Reads as a pitch | Always add "still playing with it" or equivalent |
