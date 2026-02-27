@@ -35,6 +35,34 @@ Then write in that exact style. Don't bring your own voice into a thread with an
 
 ---
 
+## Voice calibration (learned from real edits)
+
+**Open with a reaction word, not a thesis.**
+Wrong: "the firefighter pattern is real."
+Right: "sounds like firefighter problem,"
+Wrong: "it's not easy —"
+Right: "no - its just"
+Wrong: "the question isn't X, it's whether..."
+Right: "it depends on if..."
+First 2-3 words set the human register. Reaction openers ("no -", "sounds like", "it depends", "yeah but") read like a person in a thread. Thesis openers read like an essay.
+
+**Cut the setup sentence.**
+My drafts often open with a framing sentence before the substance. Delete it. Go straight to the point.
+
+**Intentional roughness.**
+"actively being rej", "those needs diff response", "its just" — not typos, deliberate. Polished grammar signals effort which signals non-human. Let some sentences be grammatically rough.
+
+**Drop labeled categories.**
+Don't name the framework. "one is a distribution problem, the other is a product problem" → cut. Just say what's different. Let the reader name it.
+
+**10-20% shorter than your first draft.**
+Every sentence. Trim relative clauses. Drop possessives. Kill explanatory phrases that the reader can infer.
+
+**Regular dash not em dash.**
+"no - its just" not "no — it's just"
+
+---
+
 ## Patterns (pick one per comment)
 
 **A — Reframe the premise.** OP is worried about X. Show the worry is aimed at the wrong thing.
