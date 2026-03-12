@@ -1,10 +1,11 @@
-import os
 #!/usr/bin/env python3
 """
 Job Finder — run monthly after HN "Who is Hiring" thread drops.
 Usage: python3 run_job_finder.py [--wipe] [--hn-only] [--yc-only]
+
+Requires: NOTION_TOKEN env var
 """
-import re, html, json, time, datetime, sys
+import os, re, html, json, time, datetime, sys
 import requests
 from concurrent.futures import ThreadPoolExecutor
 
@@ -13,7 +14,34 @@ DB_ID = '3207cca3-92fe-80ae-be95-ec2120c9ef64'
 H = {"Authorization": f"Bearer {NOTION_KEY}", "Notion-Version": "2022-06-28", "Content-Type": "application/json"}
 HN_CACHE = '/tmp/hn_comments.json'
 
-# ── Filters ──────────────────────────────────────────────────────────────────
+# ── Rate limit wrapper ────────────────────────────────────────────────────────
+# Notion allows ~3 req/s. We target 2.5 req/s (0.4s gap) for safe margin.
+# On 429: respect Retry-After header, then exponential backoff up to 3 retries.
+
+NOTION_MIN_INTERVAL = 0.4  # seconds between any Notion API call
+_last_notion_call = 0.0
+
+def notion_request(method, url, **kwargs):
+    global _last_notion_call
+    for attempt in range(3):
+        # Enforce minimum interval
+        elapsed = time.time() - _last_notion_call
+        if elapsed < NOTION_MIN_INTERVAL:
+            time.sleep(NOTION_MIN_INTERVAL - elapsed)
+        _last_notion_call = time.time()
+
+        r = requests.request(method, url, headers=H, **kwargs)
+
+        if r.status_code == 429:
+            retry_after = float(r.headers.get('Retry-After', 2 ** (attempt + 1)))
+            print(f"  ⚠️  Rate limited — sleeping {retry_after:.1f}s (attempt {attempt+1}/3)", flush=True)
+            time.sleep(retry_after)
+            continue
+        return r
+    print(f"  ❌ Failed after 3 attempts: {url}", flush=True)
+    return r
+
+# ── Filters ───────────────────────────────────────────────────────────────────
 
 WANT = [
     'product manager', 'head of product', 'vp of product', 'director of product',
@@ -67,7 +95,7 @@ def location_ok(t):
     if any(r in t for r in REMOTE): return True
     if any(o in t for o in ONSITE):
         return any(n in t for n in NYC + SF)
-    return True
+    return True  # unspecified = include
 
 def extract_link(raw):
     urls = re.findall(r'https?://[^\s<"\')\]]+', raw)
@@ -96,13 +124,8 @@ def push_row(company, role, link, notes, source='hn'):
         props['Link'] = {'url': link}
     if notes:
         props['Notes'] = {'rich_text': [{'text': {'content': notes[:2000]}}]}
-    r = requests.post("https://api.notion.com/v1/pages",
-        json={"parent": {"database_id": DB_ID}, "properties": props}, headers=H)
-    if r.status_code == 429:
-        time.sleep(2)
-        r = requests.post("https://api.notion.com/v1/pages",
-            json={"parent": {"database_id": DB_ID}, "properties": props}, headers=H)
-    time.sleep(0.35)
+    r = notion_request('POST', 'https://api.notion.com/v1/pages',
+        json={"parent": {"database_id": DB_ID}, "properties": props})
     return r.status_code == 200
 
 # ── Wipe ──────────────────────────────────────────────────────────────────────
@@ -113,18 +136,16 @@ def wipe_db():
     while True:
         body = {"page_size": 100}
         if cursor: body["start_cursor"] = cursor
-        r = requests.post(f"https://api.notion.com/v1/databases/{DB_ID}/query", json=body, headers=H)
+        r = notion_request('POST', f"https://api.notion.com/v1/databases/{DB_ID}/query", json=body)
         data = r.json()
         rows = data.get("results", [])
         if not rows: break
         for row in rows:
-            requests.patch(f"https://api.notion.com/v1/pages/{row['id']}",
-                json={"archived": True}, headers=H)
+            notion_request('PATCH', f"https://api.notion.com/v1/pages/{row['id']}",
+                json={"archived": True})
             wiped += 1
-            time.sleep(0.15)
         if not data.get("has_more"): break
         cursor = data.get("next_cursor")
-        time.sleep(0.3)
     print(f"Wiped {wiped} rows", flush=True)
 
 # ── Source 1: HN "Who is Hiring" thread ──────────────────────────────────────
@@ -142,7 +163,8 @@ def fetch_item(item_id):
     try:
         r = requests.get(f'https://hacker-news.firebaseio.com/v0/item/{item_id}.json', timeout=8)
         return r.json() if r.status_code == 200 else None
-    except: return None
+    except:
+        return None
 
 def fetch_hn_comments(thread_id):
     print(f"Fetching HN thread {thread_id}...", flush=True)
@@ -153,13 +175,12 @@ def fetch_hn_comments(thread_id):
         results = list(ex.map(fetch_item, comment_ids))
     comments = [c for c in results if c and not c.get('deleted') and not c.get('dead')]
     json.dump(comments, open(HN_CACHE, 'w'))
-    print(f"  Fetched {len(comments)} comments → saved to {HN_CACHE}", flush=True)
+    print(f"  {len(comments)} valid → cached to {HN_CACHE}", flush=True)
     return comments
 
 def run_hn():
-    import os
     if os.path.exists(HN_CACHE):
-        print(f"Loading cached HN comments from {HN_CACHE}", flush=True)
+        print(f"Using cached HN data: {HN_CACHE}", flush=True)
         comments = json.load(open(HN_CACHE))
     else:
         thread_id = find_hn_thread_id()
@@ -204,7 +225,7 @@ def run_hn():
 
     print(f"HN: {pushed} pushed", flush=True)
 
-# ── Source 2: HN Algolia YC Job Posts ────────────────────────────────────────
+# ── Source 2: HN Algolia YC job posts ────────────────────────────────────────
 
 def run_yc_algolia():
     cutoff = int((datetime.datetime.now() - datetime.timedelta(days=60)).timestamp())
@@ -227,7 +248,7 @@ def run_yc_algolia():
                 seen.add(h['objectID'])
                 results.append(h)
         time.sleep(0.4)
-    print(f"YC Algolia: {len(results)} unique posts found", flush=True)
+    print(f"YC Algolia: {len(results)} unique posts", flush=True)
 
     pushed = 0
     for h in results:
@@ -260,6 +281,9 @@ def run_yc_algolia():
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 if __name__ == '__main__':
+    if not NOTION_KEY:
+        print("ERROR: NOTION_TOKEN env var not set", flush=True)
+        sys.exit(1)
     args = sys.argv[1:]
     if '--wipe' in args:
         wipe_db()

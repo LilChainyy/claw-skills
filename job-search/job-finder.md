@@ -26,10 +26,18 @@ description: Automated startup job discovery. Scans HN Who is Hiring + HN Algoli
 
 ## Rate Limits
 
-- Notion API: 0.35s between writes (3 req/s limit)
-- HN Firebase API: 0.1s between comment fetches, batch with 10 concurrent threads max
-- HN Algolia API: 0.4s between search queries
-- If any 429 response: sleep 2s and retry once
+**Notion API (3 req/s hard limit):**
+- All calls go through a single `notion_request()` wrapper in `run_job_finder.py`
+- Enforces minimum 0.4s gap between every Notion call (= 2.5 req/s, safe margin)
+- On 429: reads `Retry-After` header, sleeps that duration, retries up to 3x with exponential backoff
+- Do NOT call Notion directly — always use the wrapper
+- Common mistake: wipe loop at 0.15s/call = 6.7 req/s → always triggers 429
+
+**HN Firebase API:**
+- 10 concurrent threads for comment fetching (no rate limit documented, keep ≤10)
+
+**HN Algolia API:**
+- 0.4s between search queries
 
 ---
 
