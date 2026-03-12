@@ -1,173 +1,353 @@
 ---
 name: job-finder
-description: Automated startup job discovery. Scans multiple sources for relevant roles, filters by profile fit, and pushes matches to a Notion database. Self-improving — tracks what you click on to refine future results.
+description: Automated startup job discovery. Scans HN Who is Hiring + HN Algolia job posts, filters for PM/FDE/ops roles, pushes to Notion. Run monthly after new HN thread drops.
 ---
 
 # Job Finder
 
-## Purpose
+## Notion Setup
 
-Continuously discover early-stage startup roles that match your profile. Push company name + role link to Notion. Learn over time what you're interested in.
+- **Token:** `${NOTION_TOKEN}`
+- **DB ID:** `3207cca3-92fe-80ae-be95-ec2120c9ef64`
+- **Columns:** Company (title), Role (rich_text), Link (url), Source (select), Notes (rich_text), Date Found (date), Status (select)
+- **No Score, Stage, or Location columns** — keep it clean
 
-## Your Profile (filter criteria)
+## Profile
 
-- **Roles:** Product Manager, Strategic Projects, Forward Deployed Engineer, Deployment Strategist, Business Operations, AI Strategist, GTM roles at AI companies
-- **Stage:** Seed to Series B. <200 people. Founding-team energy.
-- **Domain:** AI/ML infrastructure, fintech, devtools, enterprise AI, data platforms
-- **Location:** NYC preferred, SF ok, remote ok
-- **Comp floor:** $120K+ base
-- **Background match:** Values consulting/FDD experience, technical building (LLM pipelines, RAG), customer-facing roles, ambiguity tolerance
-- **Red flags to skip:** Pure engineering (>80% coding), pure sales/BDR, companies with no funding info, roles requiring 5+ years specific domain experience
+- **Want:** Product Manager, Forward Deployed Engineer, FDE, Chief of Staff, Solutions Engineer, Solutions Architect, Technical Program Manager, Deployment Strategist, AI Strategist, Business Operations, Head of Product, Founding PM, Implementation Engineer, Customer Success Engineer, Product Operations, Strategy & Operations
+- **Skip:** Any SWE, backend/frontend/fullstack/platform/systems engineer, ML engineer, data engineer, DevOps, SRE, designer, BDR/SDR, account exec, sales rep, copywriter, recruiter, engineering manager, staff engineer, principal engineer, research scientist, data scientist, iOS/Android engineer
+- **No big corps:** Bloomberg, Microsoft, Google, Meta, Amazon, Apple, Netflix, Salesforce, Oracle, IBM, Cisco, Intel, Nvidia, Adobe, Twilio, Stripe, Shopify, Uber, Lyft, Airbnb, DoorDash, Coinbase, Robinhood, Plaid, Datadog, Snowflake, Databricks, Cloudflare, MongoDB, Elastic, GitLab, Atlassian, Figma, Canva, Discord, Zoom, HubSpot, Zendesk, Intercom, Postman, Samsung, Sony, Siemens, McKinsey, Bain, BCG, Deloitte, Accenture, JPMorgan, Goldman, Morgan Stanley, Reddit, Mozilla, PostHog, Zed, DeepL, SafetyWing, Ashby, Wave, Wikipedia, Palantir, Scale AI, Anduril, OpenAI, Anthropic, Mistral, Cohere, Perplexity
+- **Location:** Remote = always OK. Onsite = only NYC or SF/Bay Area. No explicit location = include.
 
-## Sources (checked in order)
+## Link + Notes Rules
 
-### 1. HN "Who is Hiring?" (Monthly)
-- **URL pattern:** `https://news.ycombinator.com/item?id={THREAD_ID}`
-- **API:** `https://hacker-news.firebaseio.com/v0/item/{id}.json`
-- **How:** Fetch thread → get all top-level comment IDs → fetch each comment → parse company name, role, location, remote status, description
-- **Finding the thread:** Search `https://hn.algolia.com/api/v1/search?query="Who is hiring"&tags=ask_hn&numericFilters=created_at_i>{UNIX_30_DAYS_AGO}` for the latest thread ID
-- **Frequency:** 1st of every month (new thread posted automatically)
+- **Link column:** Only real URLs. Leave blank if none.
+- **Notes column:** Catch-all. If no link → full job description. Always include location context (e.g., "NYC onsite", "Remote"). Put anything else relevant (stage, funding, team size) here too.
 
-### 2. Wellfound (AngelList) — Startup Jobs
-- **URL:** `https://wellfound.com/role/l/product-manager/united-states`
-- **How:** Fetch listing pages, filter by stage/funding/role
-- **Frequency:** Weekly
+## Rate Limits
 
-### 3. YC Work at a Startup
-- **URL:** `https://www.workatastartup.com/jobs`
-- **API:** `https://www.workatastartup.com/companies/autocomplete?query=&page=1&batch=&demo_day=true`
-- **How:** Filter by role type, company size, funding
-- **Frequency:** Weekly
+- Notion API: 0.35s between writes (3 req/s limit)
+- HN Firebase API: 0.1s between comment fetches, batch with 10 concurrent threads max
+- HN Algolia API: 0.4s between search queries
+- If any 429 response: sleep 2s and retry once
 
-### 4. Ashby Job Boards (direct)
-- **How:** For companies on your radar, check `https://api.ashbyhq.com/posting-api/job-board/{slug}?includeCompensation=true`
-- **Frequency:** When researching specific companies
+---
 
-### 5. Recently Funded Companies
-- **Sources:**
-  - Crunchbase recent rounds: search for Seed/A/B in AI, fintech, devtools
-  - TechCrunch funding tag: `https://techcrunch.com/category/fundraise/`
-  - The Information, Axios Pro Rata (if accessible)
-- **How:** Find companies that raised in last 30 days → check their careers page → filter for matching roles
-- **Frequency:** Weekly
+## Source 1: HN "Who is Hiring?" Thread (Monthly)
 
-### 6. Twitter/X Signals
-- **How:** Search X for "we're hiring" + "AI" / "founding" / "product" from accounts with <50K followers (startup signal)
-- **Frequency:** When X research cron runs
+Run once per month after the new thread is posted (first weekday of month).
 
-### 7. Hacker News "Who wants to be hired" Adjacent
-- **URL:** Companies that post on HN Show/Launch often have open roles
-- **How:** Check `https://news.ycombinator.com/show` for AI/dev companies, then check their careers
+### Find current thread ID
 
-## Filtering Algorithm
+```python
+import requests, time, datetime
 
-### Pass 1: Keyword Match (fast, rules-based)
-Score each role 0-100 based on:
-
-```
-+20  title contains: product manager, PM, strategic projects, deployment, 
-     FDE, forward deployed, business ops, AI strategist, GTM
-+15  company description mentions: AI, LLM, agents, infrastructure, fintech, devtools
-+10  stage: seed, series A, series B, <100 employees
-+10  location: NYC, SF, remote
-+10  comp: $120K+ mentioned or likely based on stage
--30  title contains: senior engineer, staff engineer, SRE, BDR, SDR
--20  requires: 5+ years, PhD required, specific language fluency
--10  company: >500 employees, government contractor, non-tech
+cutoff = int((datetime.datetime.now() - datetime.timedelta(days=35)).timestamp())
+r = requests.get(
+    f'https://hn.algolia.com/api/v1/search?query="Ask HN: Who is hiring"&tags=ask_hn'
+    f'&numericFilters=created_at_i>{cutoff}&hitsPerPage=5',
+    timeout=10
+)
+hits = r.json().get('hits', [])
+# Pick the most recent one titled "Ask HN: Who is hiring? (..."
+thread = next((h for h in hits if 'who is hiring' in h['title'].lower()), None)
+THREAD_ID = thread['objectID']  # e.g. "43324661"
 ```
 
-Threshold: score >= 40 passes to output.
+### Fetch all comments
 
-### Pass 2: LLM Judgment (slower, for borderline cases)
-For roles scoring 30-50, ask the LLM:
-"Given this role description and this candidate profile, is this a realistic fit? Reply YES/NO with one reason."
+```python
+import requests, json, time
+from concurrent.futures import ThreadPoolExecutor
 
-### Self-Improvement Loop
-Track in `job-search-state.json`:
-```json
-{
-  "lastRun": "2026-03-11T00:00:00Z",
-  "sources": {
-    "hn": { "lastThreadId": 47219668, "lastChecked": "..." },
-    "wellfound": { "lastPage": 3, "lastChecked": "..." },
-    "yc": { "lastChecked": "..." },
-    "funding": { "lastChecked": "..." }
-  },
-  "stats": {
-    "totalFound": 0,
-    "totalPushed": 0,
-    "clickedBack": [],
-    "ignoredCompanies": [],
-    "preferredCompanies": []
-  },
-  "learned": {
-    "preferredKeywords": [],
-    "avoidKeywords": [],
-    "preferredInvestors": ["sequoia", "a16z", "founders fund", "greylock", "kleiner perkins"],
-    "notes": ""
-  }
-}
+def fetch_item(item_id):
+    r = requests.get(f'https://hacker-news.firebaseio.com/v0/item/{item_id}.json', timeout=8)
+    return r.json() if r.status_code == 200 else None
+
+# Get thread
+thread = fetch_item(THREAD_ID)
+comment_ids = thread.get('kids', [])
+
+# Fetch all top-level comments (these are the job postings)
+comments = []
+with ThreadPoolExecutor(max_workers=10) as ex:
+    results = list(ex.map(fetch_item, comment_ids))
+comments = [c for c in results if c and not c.get('deleted') and not c.get('dead')]
+# Save locally: json.dump(comments, open('/tmp/hn_comments.json', 'w'))
 ```
 
-Over time:
-- If you consistently ignore roles from certain company types → add to avoid list
-- If you click on roles with certain keywords → boost those keywords
-- If you message companies with certain investors → boost those investors
-- Weekly: review what was pushed vs what you acted on, update scoring weights
+### Filter and push
 
-## Notion Output
+```python
+import re, html, requests, json, time
 
-### Database: `31f7cca3-92fe-8015-988c-000b8326f168`
+NOTION_KEY = '${NOTION_TOKEN}'
+DB_ID = '3207cca3-92fe-80ae-be95-ec2120c9ef64'
+H = {"Authorization": f"Bearer {NOTION_KEY}", "Notion-Version": "2022-06-28", "Content-Type": "application/json"}
 
-Required: Notion API token (set as `NOTION_API_KEY` in env)
+def cl(t):
+    return re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', html.unescape(t))).strip()
 
-Each row:
-| Property | Type | Value |
-|---|---|---|
-| Company | Title | Company name |
-| Role | Rich Text | Role title |
-| Link | URL | Job posting URL |
-| Source | Select | hn / wellfound / yc / funding / ashby / twitter |
-| Score | Number | 0-100 filter score |
-| Location | Rich Text | NYC / SF / Remote / etc |
-| Stage | Select | Seed / Series A / Series B / Growth |
-| Date Found | Date | When discovered |
-| Status | Select | New / Reviewed / Applied / Skipped |
+WANT = [
+    'product manager', 'head of product', 'vp of product', 'director of product',
+    'founding pm', 'founding product manager', 'product lead',
+    'forward deployed', 'fde',
+    'deployment strategist', 'ai strategist',
+    'chief of staff', 'head of operations', 'biz ops', 'head of biz ops',
+    'solutions engineer', 'solution engineer', 'solutions architect',
+    'customer success engineer', 'implementation engineer',
+    'technical program manager', 'tpm',
+    'product operations', 'strategic operations', 'business operations',
+    'strategy and operations', 'ai product',
+]
 
-### Notion API Push
-```bash
-curl -X POST "https://api.notion.com/v1/pages" \
-  -H "Authorization: Bearer $NOTION_API_KEY" \
-  -H "Notion-Version: 2022-06-28" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "parent": {"database_id": "31f7cca392fe8015988c000b8326f168"},
-    "properties": {
-      "Company": {"title": [{"text": {"content": "AfterQuery"}}]},
-      "Role": {"rich_text": [{"text": {"content": "Strategic Projects Lead"}}]},
-      "Link": {"url": "https://jobs.ashbyhq.com/..."},
-      "Source": {"select": {"name": "hn"}},
-      "Score": {"number": 85},
-      "Location": {"rich_text": [{"text": {"content": "SF"}}]},
-      "Date Found": {"date": {"start": "2026-03-11"}}
+KILL = [
+    'software engineer', 'backend engineer', 'frontend engineer',
+    'full stack engineer', 'fullstack engineer', 'platform engineer',
+    'systems engineer', 'data engineer', 'ml engineer', 'devops', 'sre',
+    'security engineer', 'qa engineer', 'embedded', 'compiler',
+    'infrastructure engineer', 'founding engineer',
+    'designer', 'ux designer', 'ui designer', 'product designer',
+    'bdr', 'sdr', 'account executive', 'sales rep',
+    'copywriter', 'content writer', 'recruiter',
+    'engineering manager', 'staff engineer', 'principal engineer',
+    'research scientist', 'data scientist', 'ml researcher', 'ml manager',
+    'ios engineer', 'android engineer', 'mobile engineer',
+    'java engineer', 'ruby engineer', 'go engineer', 'rust engineer',
+]
+
+BIG = [
+    'bloomberg', 'microsoft', 'google', 'meta', 'amazon', 'apple', 'netflix',
+    'salesforce', 'oracle', 'ibm', 'cisco', 'intel', 'nvidia', 'adobe', 'twilio',
+    'stripe', 'shopify', 'uber', 'lyft', 'airbnb', 'doordash', 'coinbase',
+    'robinhood', 'plaid', 'datadog', 'snowflake', 'databricks', 'cloudflare',
+    'mongodb', 'elastic', 'gitlab', 'atlassian', 'figma', 'canva', 'discord',
+    'zoom', 'hubspot', 'zendesk', 'intercom', 'postman', 'samsung', 'sony',
+    'siemens', 'mckinsey', 'bain', 'bcg', 'deloitte', 'accenture', 'jpmorgan',
+    'goldman', 'morgan stanley', 'reddit', 'mozilla', 'posthog', 'zed industries',
+    'deepl', 'safetywing', 'ashby', 'wave', 'wikipedia', 'palantir', 'scale ai',
+    'anduril', 'openai', 'anthropic', 'mistral', 'cohere', 'perplexity',
+]
+
+ONSITE = ['onsite', 'on-site', 'in-office', 'in office', 'hybrid']
+NYC = ['nyc', 'new york']
+SF = ['sf ', 'san francisco', 'bay area']
+REMOTE = ['remote', 'worldwide', 'work from anywhere', 'distributed']
+
+def location_ok(t):
+    if any(r in t for r in REMOTE): return True
+    if any(o in t for o in ONSITE):
+        return any(n in t for n in NYC + SF)
+    return True  # unspecified = include
+
+def extract_link(raw):
+    urls = re.findall(r'https?://[^\s<"\')\]]+', raw)
+    for u in urls:
+        ul = u.lower()
+        if any(x in ul for x in ['jobs.ashbyhq', 'greenhouse.io', 'lever.co', '/jobs',
+                                   '/careers', 'workable', 'boards.greenhouse', 'wellfound']):
+            return u.rstrip('.,;)')
+    for u in urls:
+        ul = u.lower()
+        if not any(x in ul for x in ['ycombinator', 'news.yc', 'twitter', 'linkedin', 'github', 't.co']):
+            return u.rstrip('.,;)')
+    return None
+
+def push_row(company, role, link, notes, source='hn'):
+    if not role or len(role) < 3: return False
+    if re.match(r'^(remote|http|san francisco|new york|nyc|sf)', role.lower()): return False
+    props = {
+        'Company': {'title': [{'text': {'content': company[:100]}}]},
+        'Role': {'rich_text': [{'text': {'content': role[:200]}}]},
+        'Source': {'select': {'name': source}},
+        'Date Found': {'date': {'start': datetime.date.today().isoformat()}},
+        'Status': {'select': {'name': 'New'}},
     }
-  }'
+    if link and link.startswith('http'):
+        props['Link'] = {'url': link}
+    if notes:
+        props['Notes'] = {'rich_text': [{'text': {'content': notes[:2000]}}]}
+    r = requests.post("https://api.notion.com/v1/pages",
+        json={"parent": {"database_id": DB_ID}, "properties": props}, headers=H)
+    if r.status_code == 429:
+        time.sleep(2)
+        r = requests.post("https://api.notion.com/v1/pages",
+            json={"parent": {"database_id": DB_ID}, "properties": props}, headers=H)
+    time.sleep(0.35)
+    return r.status_code == 200
+
+# Load cached comments (if already fetched this session)
+comments = json.load(open('/tmp/hn_comments.json'))
+
+pushed = 0
+for c in comments:
+    raw = c.get('text', '')
+    if not raw: continue
+    t = cl(raw).lower()
+    first = raw.split('<p>')[0]
+    fc = cl(first)
+    parts = re.split(r'\s*[\|]\s*', fc)
+    company = parts[0].strip()
+
+    if any(bc in company.lower() for bc in BIG): continue
+    if not any(w in t for w in WANT): continue
+    if any(k in t for k in KILL): continue
+    if not location_ok(t): continue
+
+    # Parse role — must be 2nd pipe segment and look like a title, not a location
+    if len(parts) >= 2:
+        candidate = parts[1].strip()
+        if re.match(r'^(remote|http|san francisco|new york|nyc|sf |worldwide)', candidate.lower()):
+            candidate = fc
+    else:
+        candidate = fc
+    role = candidate[:200]
+    if any(k in role.lower() for k in KILL): continue
+
+    link = extract_link(raw)
+    loc_raw = ' | '.join(p.strip() for p in parts[2:] if p.strip()) if len(parts) > 2 else ''
+    desc = cl(raw)[:800]
+    notes = (f"[{loc_raw}] " if loc_raw else "") + (desc if not link else "")
+
+    ok = push_row(company, role, link, notes.strip(), 'hn')
+    if ok:
+        pushed += 1
+        print(f"✅ [{'✓' if link else 'desc'}] {company[:35]:35s} | {role[:55]}")
+
+print(f"HN: {pushed} pushed")
 ```
 
-## Execution
+---
 
-### Manual Run
+## Source 2: HN Algolia Job Posts (YC companies that post on HN)
+
+Run alongside HN thread scan.
+
+```python
+import requests, re, datetime, time
+
+NOTION_KEY = '${NOTION_TOKEN}'
+DB_ID = '3207cca3-92fe-80ae-be95-ec2120c9ef64'
+H = {"Authorization": f"Bearer {NOTION_KEY}", "Notion-Version": "2022-06-28", "Content-Type": "application/json"}
+
+cutoff = int((datetime.datetime.now() - datetime.timedelta(days=60)).timestamp())
+
+queries = [
+    'forward deployed engineer',
+    'deployment lead',
+    'product manager hiring',
+    'solutions engineer hiring',
+    'chief of staff hiring',
+    'technical program manager hiring',
+    'head of product hiring',
+    'biz ops hiring',
+    'implementation engineer hiring',
+    'ai product manager',
+    'founding pm hiring',
+    'product operations',
+    'strategy operations startup',
+    'customer engineer startup',
+]
+
+results = []
+seen = set()
+for q in queries:
+    url = (f"https://hn.algolia.com/api/v1/search?query={requests.utils.quote(q)}"
+           f"&tags=job&numericFilters=created_at_i>{cutoff}&hitsPerPage=20")
+    r = requests.get(url, timeout=10)
+    for h in r.json().get('hits', []):
+        if h['objectID'] not in seen:
+            seen.add(h['objectID'])
+            results.append(h)
+    time.sleep(0.4)
+
+# Reuse KILL and BIG lists from above
+
+pushed = 0
+for h in results:
+    title = h.get('title', '')
+    url = h.get('url', '')
+    t = title.lower()
+    if any(k in t for k in KILL): continue
+    if any(bc in t for bc in BIG): continue
+
+    # Parse "Company (YC XX) Is Hiring [Role]" pattern
+    m = re.match(r'^(.+?)\s+(?:\(YC [A-Z]\d+\)\s+)?[Ii]s [Hh]iring\s+(?:a\s+|an\s+)?(.+)$', title)
+    if m:
+        company = re.sub(r'\s*\(YC [A-Z]\d+\)', '', m.group(1)).strip()
+        role = m.group(2).strip()
+    else:
+        parts = title.split(' Is Hiring ')
+        company = re.sub(r'\s*\(YC [A-Z]\d+\)', '', parts[0]).strip() if len(parts) == 2 else title[:50]
+        role = parts[1].strip() if len(parts) == 2 else title
+
+    link = url if url and url.startswith('http') else ''
+    notes = f"HN job post: {title}"
+
+    ok = push_row(company, role, link, notes, source='yc')
+    if ok:
+        pushed += 1
+        print(f"✅ [{'✓' if link else '✗'}] {company[:35]:35s} | {role[:55]}")
+
+print(f"YC/HN Algolia: {pushed} pushed")
 ```
-"Run job-finder: scan HN March 2026 thread and push matches to Notion"
+
+---
+
+## Wipe DB Before a Fresh Run
+
+```python
+import requests, time
+
+NOTION_KEY = '${NOTION_TOKEN}'
+DB_ID = '3207cca3-92fe-80ae-be95-ec2120c9ef64'
+H = {"Authorization": f"Bearer {NOTION_KEY}", "Notion-Version": "2022-06-28", "Content-Type": "application/json"}
+
+cursor = None
+wiped = 0
+while True:
+    body = {"page_size": 100}
+    if cursor: body["start_cursor"] = cursor
+    r = requests.post(f"https://api.notion.com/v1/databases/{DB_ID}/query", json=body, headers=H)
+    data = r.json()
+    rows = data.get("results", [])
+    if not rows: break
+    for row in rows:
+        requests.patch(f"https://api.notion.com/v1/pages/{row['id']}",
+            json={"archived": True}, headers=H)
+        wiped += 1
+        time.sleep(0.15)
+    if not data.get("has_more"): break
+    cursor = data.get("next_cursor")
+    time.sleep(0.3)
+print(f"Wiped {wiped} rows")
 ```
 
-### Cron (recommended)
-- **Weekly (Monday 8 AM ET):** Scan all sources, push new matches
-- **Monthly (1st, after HN thread posts):** Full HN thread scan
+---
 
-### First Run Setup
-1. Get Notion API token → set `NOTION_API_KEY`
-2. Share the database with the integration
-3. Create the database properties (Company, Role, Link, Source, Score, Location, Stage, Date Found, Status)
-4. Run initial scan of current HN thread
-5. Set up weekly cron
+## Execution Instructions
+
+**Full monthly run (run this when a new HN thread drops):**
+
+1. Find current HN thread ID via Algolia
+2. Fetch all thread comments (batch with 10 threads)
+3. Save to `/tmp/hn_comments.json`
+4. (Optional) Wipe DB if doing a fresh pass
+5. Run HN filter + push
+6. Run HN Algolia job posts search + push
+
+**Invoke:** "Run job-finder" or "Scan HN jobs and push to Notion"
+
+**Notes:**
+- HN thread = ~300-500 comments, takes ~1-2 min to fetch at 10 concurrent
+- Notion push at 0.35s/row = ~3.5s per 10 rows
+- Algolia search = ~6s for 14 queries
+- Total run time: ~3-5 minutes
+- Do NOT re-fetch HN thread if `/tmp/hn_comments.json` already exists from same session
+
+## Known Limitations
+
+- HN "Who is Hiring" posts often have no job board link — only company site or none at all. Description goes in Notes.
+- HN Algolia job tag is thin — only YC/startup companies that post HN job listings directly (not the monthly thread)
+- No browser = can't reach Wellfound, ycombinator.com/jobs (JS-rendered). If browser is available, add Wellfound as Source 3.
+- Notion API occasionally returns 400 on malformed URLs — strip trailing punctuation from links
